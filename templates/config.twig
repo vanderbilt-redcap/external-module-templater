@@ -1,11 +1,35 @@
 <html>
 <head>
-
+    <link rel="text/css" href="{{ constant('APP_PATH_CSS') }}jquery-ui.min.css" />
+    <link rel="text/css" href="{{ constant('APP_PATH_CSS') }}bootstrap.min.css" />
+    <link rel="text/css" href="{{ constant('APP_PATH_CSS') }}style.css" />
+    <script type="text/javascript" src="{{ constant('APP_PATH_JS') }}base.js"></script>
 </head>
 <body>
-Test Config<br />
-{% for key,hook in all_hooks %}
-    <input type="checkbox" name="enable_hook_{{ hook.hook_name }}">{{ hook.hook_name }}<br />
-{% endfor %}
+<div class="row">
+    <div class="col-12">Configure New Module</div>
+</div>
+<form method="POST">
+    {% for key,hook in all_hooks %}
+    <div class="row">
+        <div class="col-xs-1">
+            <input type="checkbox" name="selected_hooks[]" value="{{ hook.hook_name }}" />
+        </div>
+        <div class="col-xs-11">
+            {{ hook.hook_name }}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row">
+        <label>Namespace</label><input type="text" name="namespace" />
+    </div>
+    <div class="row">
+        <label>Class Name</label><input type="text" name="classname" />
+    </div>
+    <div class="row">
+        <input type="hidden" name="generate" value="1" />
+        <input type="submit" value="Generate" />
+    </div>
+</form>
 </body>
 </html>
