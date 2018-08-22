@@ -1,0 +1,11 @@
+<html>
+<head>
+
+</head>
+<body>
+Test Config<br />
+{% for key,hook in all_hooks %}
+    <input type="checkbox" name="enable_hook_{{ hook.hook_name }}">{{ hook.hook_name }}<br />
+{% endfor %}
+</body>
+</html>
