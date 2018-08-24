@@ -1,35 +1,51 @@
 <html>
 <head>
-    <link rel="text/css" href="{{ constant('APP_PATH_CSS') }}jquery-ui.min.css" />
-    <link rel="text/css" href="{{ constant('APP_PATH_CSS') }}bootstrap.min.css" />
-    <link rel="text/css" href="{{ constant('APP_PATH_CSS') }}style.css" />
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}jquery-ui.min.css" />
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}style.css" />
     <script type="text/javascript" src="{{ constant('APP_PATH_JS') }}base.js"></script>
 </head>
 <body>
-<div class="row">
-    <div class="col-12">Configure New Module</div>
+<div class="container"><br />
+    <div class="row">
+        <div class="col-6 text-center">Configure New Module</div>
+    </div><br />
+    <div class="form-group">
+        <form method="POST">
+            {% for hook_name,hook_details in all_hooks %}
+            <div class="row">
+                <div class="col-2 text-right">
+                    <input type="checkbox" name="selected_hooks[]" value="{{ hook_name }}" />
+                </div>
+                <div class="col-9">
+                    <label for="selected_hooks[]">{{ hook_name }}</label>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-2 text-right">
+                    <label for="namespace">Namespace</label>
+                </div>
+                <div class="col-9">
+                    <input type="text" name="namespace" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 text-right">
+                    <label for="classname">Class Name</label>
+                </div>
+                <div class="col-9">
+                    <input type="text" name="classname" />
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-6 text-center">
+                    <input type="hidden" name="generate" value="1" />
+                    <input type="submit" value="Generate" />
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
-<form method="POST">
-    {% for key,hook in all_hooks %}
-    <div class="row">
-        <div class="col-xs-1">
-            <input type="checkbox" name="selected_hooks[]" value="{{ hook.hook_name }}" />
-        </div>
-        <div class="col-xs-11">
-            {{ hook.hook_name }}
-        </div>
-    </div>
-    {% endfor %}
-    <div class="row">
-        <label>Namespace</label><input type="text" name="namespace" />
-    </div>
-    <div class="row">
-        <label>Class Name</label><input type="text" name="classname" />
-    </div>
-    <div class="row">
-        <input type="hidden" name="generate" value="1" />
-        <input type="submit" value="Generate" />
-    </div>
-</form>
 </body>
 </html>

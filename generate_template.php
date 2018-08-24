@@ -15,7 +15,7 @@ if($_POST['generate'] == 1) {
         "className" => $_POST['classname']];
 
     $configJson = $twig->render("configJson.twig", $parameters);
-    $classFile = $twig->render("classFile.twig", $parameters);
+    $classFile = $twig->render("classFile.php", $parameters);
     $otherFiles = $twig->render("otherFiles.twig",$parameters);
 
     $zipArchive = new \ZipArchive();
