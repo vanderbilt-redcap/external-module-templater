@@ -5,7 +5,7 @@ namespace RedcapConHack\Templater;
 require_once(__DIR__."/vendor/autoload.php");
 
 $loader = new \Twig_Loader_Filesystem(__DIR__."/templates/");
-$twig = new \Twig_Environment($loader);
+$twig = new \Twig_Environment($loader, array('autoescape' => false));
 
 if($_POST['generate'] == 1) {
     $parameters = ["selected_hooks" => $_POST['selected_hooks'],
@@ -35,5 +35,10 @@ if($_POST['generate'] == 1) {
     unlink($tmpFile);
 }
 else {
-    echo $twig->render("config.twig", ["all_hooks" => $module::ALL_HOOKS]);
+    echo $twig->render(
+		"config.twig", [
+			'js_link' => $module->getUrl('js/functions.js'),
+			"hooks" => $module::getHooks()
+		]
+	);
 }
