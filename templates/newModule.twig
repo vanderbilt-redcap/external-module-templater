@@ -1,0 +1,129 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}jquery-ui.min.css" />
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}style.css" />
+    <script type="text/javascript" src="{{ constant('APP_PATH_JS') }}base.js"></script>
+    <script type="text/javascript" src="{{ js_link }}"></script>
+	<title>Configure New REDCap External Module</title>
+</head>
+<body>
+<div class="container border">
+	<!-- top header -->
+    <div class="row m-5">
+        <div class="col text-center">
+			<h3>Configure New REDCap External Module</h3>
+		</div>
+    </div>
+	
+	<form method="POST">
+	
+		<!-- module level settings/inputs -->
+		<h5 class="text-center">Module</h5>
+		<div class="mx-3 mb-3 p-2 card">
+			<div class="card-body">
+				<div class="form-group row">
+					<label for="moduleName" class="col-sm-2 col-form-label">Name</label>
+					<div class="col-sm-10">
+						<input type="text" id="moduleName" name="moduleName" class="form-control" placeholder="MyModule"></input>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="moduleNamespace" class="col-sm-2 col-form-label">Namespace</label>
+					<div class="col-sm-10">
+						<input type="text" id="moduleNamespace" name="moduleNamespace" class="form-control mb-1" placeholder="ABCResearch/MyModule"></input>
+						<!-- <span class="text-muted">e.g. MyInstitution/MyModule</span> -->
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="moduleDescription" class="col-sm-2 col-form-label">Description</label>
+					<div class="col-sm-10">
+						<textarea id="moduleDescription" name="moduleDescription" class="form-control" rows="3" placeholder="This module does A, B, and C."></textarea>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="moduleInitVersion" class="col-sm-2 col-form-label">Description</label>
+					<div class="col-sm-10">
+						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" placeholder="0.1"></textarea>
+						<span class="text-muted">Must be in format X.X.X or X.X where X is an integer from 0 to 100.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- authors section -->
+		<h5 class="text-center">Authors</h5>
+		<div class="row pb-4 align-items-center">
+			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="ExternalModuleTemplater.addTab('authors')">Add Author</button>
+			<button class = "btn btn-primary" id="removeAuthorButton" type="button" onclick="ExternalModuleTemplater.removeTab('authors')" disabled>Remove Author</button>
+		</div>
+		<div id="authorsCard" class="mx-3 mb-3 p-2 card">
+			<div class="card-header">
+				<ul id="authorsTabHeads" class="nav nav-tabs card-header-tabs">
+				</ul>
+			</div>
+			<div id="authorsCardBody" class="card-body">
+			</div>
+		</div>
+		
+		<!-- hooks section -->
+		<h5 class="text-center">Hooks</h5>
+		<div class="mx-3 mb-3 p-2 card">
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Hook</th>
+							<th scope="col">Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for hook, info in hooks %}
+						<tr>
+							<th class="align-middle" scope="row">
+								<button name="{{ hook }}" type="submit" class="btn" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="ExternalModuleTemplater.toggleHook(this)">
+									{{ hook }}
+								</button>
+							</th>
+							<td>{{ info.SUMMARY }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<!-- links	-->
+		<h5 class="text-center">Links</h5>
+		<div class="row pb-4 align-items-center">
+			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="ExternalModuleTemplater.addTab('links')">Add Link</button>
+			<button class = "btn btn-primary" id="removeLinkButton" type="button" onclick="ExternalModuleTemplater.removeTab('links')" disabled>Remove Link</button>
+		</div>
+		<div id="linksCard" style="display:none" class="mx-3 mb-3 p-2 card">
+			<div class="card-header">
+				<ul id="linksTabHeads" class="nav nav-tabs card-header-tabs">
+				</ul>
+			</div>
+			<div id="linksCardBody" class="card-body"></div>
+		</div>
+		
+		<!-- crons -->
+		<h5 class="text-center">Crons</h5>
+		<div class="row pb-4 align-items-center">
+			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="ExternalModuleTemplater.addTab('crons')">Add Cron</button>
+			<button class = "btn btn-primary" id="removeCronButton" type="button" onclick="ExternalModuleTemplater.removeTab('crons')" disabled>Remove Cron</button>
+		</div>
+		<div id="cronsCard" style="display:none" class="mx-3 mb-3 p-2 card">
+			<div class="card-header">
+				<ul id="cronsTabHeads" class="nav nav-tabs card-header-tabs">
+				</ul>
+			</div>
+			<div id="cronsCardBody" class="card-body"></div>
+		</div>
+		<div class="row p-5 justify-content-center">
+			<!-- <input type='hidden' name="generate" value="1"></input> -->
+			<button class="btn btn-primary" type="submit" method="post">Generate External Module Template</button>
+		</div>
+	</form>
+</div>
+</html>

@@ -1,140 +1,93 @@
-<html>
-<head>
-    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}jquery-ui.min.css" />
-    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}bootstrap.min.css" />
-    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}style.css" />
-    <script type="text/javascript" src="{{ constant('APP_PATH_JS') }}base.js"></script>
-    <script type="text/javascript" src="{{ js_link }}"></script>
-	<title>Configure New REDCap External Module</title>
-</head>
-<body>
-<div class="container border">
-	<!-- top header -->
-    <div class="row m-5">
-        <div class="col text-center">
-			<h3>Configure New REDCap External Module</h3>
-		</div>
-    </div>
+{
+    "name": "{{ classname }}",
+
+    "namespace": "{{ namespace }}\\{{ classname }}",
+
+    "description": "{{ description }}",
+
+    "documentation": "README.md",
+
+    "authors": [
+		{% for author in authors %}
+
+        {
+            "name": "{{ author.name }}",
+            "email": "{{ author.email }}",
+            "institution": "{{ author.org }}"
+        }{% if (authors|last)!=author %},
+		{% endif %}
+		{% endfor %}
+		
+    ],
+
+    "permissions": [
+        {% for name in hooks|keys %}"{{ name }}"{% if (hooks|keys|last)!=name %},
+		{% endif %}
+		{% endfor %}
+		
+    ],
+
+    "links": {
+		"project": [
+            {% for link in projectLinks %}
+			{
+                "name": "{{ link.name }}",
+                "icon": "{{ link.icon }}",
+                "url": "{{ link.url }}"
+            }{% if (projectLinks|last)!=link %},
+			{% endif %}
+			{% endfor %}
+			
+		],
+        "control-center": [
+            {% for link in controlCenterLinks %}
+			{
+                "name": "{{ link.name }}",
+                "icon": "{{ link.icon }}",
+                "url": "{{ link.url }}{% if link.NOAUTH %}?NOAUTH{% endif %}"
+            }{% if (controlCenterLinks|last)!=link %},
+			{% endif %}
+			{% endfor %}
+			
+        ]
+    },
+
+	"no-auth-pages": [
+		{% for link in projectLinks %}
+		{% if link.NOAUTH %}"{{ link.url|split('.')[0] }}"{% if ((projectLinks|last)!=link) or (controlCenterLinks|length > 0) %},
+		{% endif %}{% endif %}
+		{% endfor %}
+		{% for link in controlCenterLinks %}
+		{% if link.NOAUTH %}"{{ link.url|split('.')[0] }}"{% if (controlCenterLinks|last)!=link %},
+		{% endif %}{% endif %}
+		{% endfor %}
+	],
 	
-	<form action="/generate_template.php" method="POST">
+	"project-settings": [
+		
+	],
 	
-		<!-- module level settings/inputs -->
-		<h5 class="text-center">Module</h5>
-		<div class="mx-3 mb-3 p-2 card">
-			<div class="card-body">
-				<div class="form-group row">
-					<label for="moduleName" class="col-sm-2 col-form-label">Name</label>
-					<div class="col-sm-10">
-						<input type="text" id="moduleName" class="form-control" placeholder="MyModule"></input>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="moduleNamespace" class="col-sm-2 col-form-label">Namespace</label>
-					<div class="col-sm-10">
-						<input type="text" id="moduleNamespace" class="form-control mb-1" placeholder="ABCResearch/MyModule"></input>
-						<!-- <span class="text-muted">e.g. MyInstitution/MyModule</span> -->
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="moduleDescription" class="col-sm-2 col-form-label">Description</label>
-					<div class="col-sm-10">
-						<textarea id="moduleDescription" class="form-control" rows="3" placeholder="This module does A, B, and C."></textarea>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="moduleInitVersion" class="col-sm-2 col-form-label">Description</label>
-					<div class="col-sm-10">
-						<input type="text" id="moduleInitVersion" class="form-control" placeholder="0.1"></textarea>
-						<span class="text-muted">Must be in format X.X.X or X.X where X is an integer from 0 to 100.</span>
-					</div>
-				</div>
-			</div>
-		</div>
+	"system-settings": [
 		
-		<!-- authors section -->
-		<h5 class="text-center">Authors</h5>
-		<div class="row pb-4 align-items-center">
-			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="addAuthor()">Add Author</button>
-			<button class = "btn btn-primary" type="button" onclick="removeAuthor()" disabled>Remove Author</button>
-		</div>
-		<div id="authorsCard" class="mx-3 mb-3 p-2 card">
-			<div class="card-header">
-				<ul id="authorTabs" class="nav nav-tabs card-header-tabs">
-					<li class="nav-item" onclick="setActiveAuthor($(this).parent().index()+1)">
-						<a class="nav-link active">1</a>
-					</li>
-				</ul>
-			</div>
-			<div id="authorsCardBody" class="card-body"></div>
-		</div>
-		
-		<!-- hooks section -->
-		<h5 class="text-center">Hooks</h5>
-		<div class="mx-3 mb-3 p-2 card">
-			<div class="card-body">
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Hook</th>
-							<th scope="col">Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for hook, info in hooks %}
-						<tr>
-							<th class="align-middle" scope="row">
-								<button type="button" class="btn" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="toggleHook(this)">
-									{{ hook }}
-								</button>
-							</th>
-							<td>{{ info.DESCRIPTION_TEXT }}</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-		
-		<!-- links	-->
-		<h5 class="text-center">Links</h5>
-		<div class="row pb-4 align-items-center">
-			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="addLink()">Add Link</button>
-			<button class = "btn btn-primary" type="button" onclick="removeLink()" disabled>Remove Link</button>
-		</div>
-		<div id="linksCard" style="display:block" class="mx-3 mb-3 p-2 card">
-			<div class="card-header">
-				<ul id="linksTabs" class="nav nav-tabs card-header-tabs">
-					<li class="nav-item" onclick="setActiveLink($(this).parent().index()+1)">
-						<a class="nav-link active">1</a>
-					</li>
-				</ul>
-			</div>
-			<div id="linksCardBody" class="card-body"></div>
-		</div>
-		
-		<!-- crons -->
-		<h5 class="text-center">Crons</h5>
-		<div class="row pb-4 align-items-center">
-			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="addCron()">Add Cron</button>
-			<button class = "btn btn-primary" type="button" onclick="removeCron()" disabled>Remove Cron</button>
-		</div>
-		<div id="cronsCard" style="display:block" class="mx-3 mb-3 p-2 card">
-			<div class="card-header">
-				<ul id="cronsTabs" class="nav nav-tabs card-header-tabs">
-					<li class="nav-item" onclick="setActiveLink($(this).parent().index()+1)">
-						<a class="nav-link active">1</a>
-					</li>
-				</ul>
-			</div>
-			<div id="cronsCardBody" class="card-body"></div>
-		</div>
-		<div class="row p-5 justify-content-center">
-			<button class="btn btn-primary" type="submit" method="post">Generate External Module Template</button>
-		</div>
-	</form>
-</div>
-<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
-<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
-</body>
-</html>
+	],
+	
+	"crons": [
+		{% for cron in crons %}
+		{
+			"cron_name": "{{ cron.name }}",
+			"cron_description": "{{ cron.desc }}",
+			"method": "{{ cron.method }}",
+			"cron_frequency": "{{ cron.freq }}",
+			"cron_max_run_time": "{{ link.max }}"
+		}{% if (crons|last)!=cron %},
+		{% endif %}
+		{% endfor %}
+	],
+	
+	"compatibility": {
+		"php-version-min": "",
+		"php-version-max": "",
+		"redcap-version-min": "",
+		"redcap-version-max": ""
+	}
+}
