@@ -98,7 +98,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$zip->addFromString('README.md', $readmeFile);
 		$zip->close();
 		$zipFileName = $data['classname'] . 'Template.zip';
-		header("Content-disposition: attachment; filename='$zipFileName'");
+		header("Content-disposition: attachment; filename=$zipFileName");
 		header('Content-type: application/zip');
 		readfile($file);
 		unlink($file);
