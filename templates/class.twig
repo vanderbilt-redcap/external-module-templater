@@ -1,16 +1,15 @@
 <?php
-namespace {{ namespace }}\{{ classname }}
+namespace {{ namespace }}\{{ className }}
 
-class {{ classname }} extends \ExternalModules\AbstractExternalModule {
+class {{ className }} extends \ExternalModules\AbstractExternalModule {
 	public function __construct() {
 		parent::__construct();
 		// Other code to run when object is instantiated
 	}
+{% for hookName, args in hooks %}
 	
-	{% for hookName, args in hooks %}public function {{ hookName }}({{ args|join(', ') }}) {
+	public function {{ hookName }}({{ args|join(', ') }}) {
 		
 	}
-	
-	{% endfor %}
-	
+{% endfor %}
 }

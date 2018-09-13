@@ -6,15 +6,18 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		// build $data array from $_POST array so Twig can render our files
 		$hookInfo = self::getHookInfo();
 		$data = [
-			'namespace' => $_POST['moduleNamespace'],
-			'classname' => $_POST['moduleName'],
+			'className' => $_POST['className'],
+			'namespace' => $_POST['namespace'],
 			'description' => $_POST['moduleDescription'],
 			'hooks' => [],
 			'authors' => [],
 			'projectLinks' => [],
 			'controlCenterLinks' => [],
-			'crons' => [],
+			'crons' => []
 		];
+		$data['initialVersion'] = empty($_POST['moduleInitVersion']) ? '0.1' : $_POST['moduleInitVersion'];
+		preg_match_all('/[A-Z][a-z]+/', $data['className'], $matches);
+		$dirName = empty($_POST['dirName']) ? join('_', array_map('strtolower', $matches[0])) . '_v' . $data['initialVersion'] : $_POST['dirName'];
 		
 		// authors
 		$done = false;
@@ -84,6 +87,10 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			$i++;
 		}
 		
+		// // header('content-type: text/plain');
+		// // echo $twig->render('config.twig', $data);
+		// // exit;
+		
 		// render necessary files
 		$classFile = $twig->render('class.twig', $data);
 		$configFile = $twig->render('config.twig', $data);
@@ -93,11 +100,17 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$zip = new \ZipArchive();
 		$file = tempnam(EDOC_PATH,"");
 		$zip->open($file, \ZipArchive::CREATE);
-		$zip->addFromString($data['classname'] . '.php', $classFile);
+		$zip->addFromString($data['className'] . '.php', $classFile);
 		$zip->addFromString('config.json', $configFile);
 		$zip->addFromString('README.md', $readmeFile);
+		
+		// add LICENSE?
+		if (isset($_POST['includeLicense']) and isset($_POST['licenseText'])){
+			$zip->addFromString('LICENSE', $_POST['licenseText']);
+		}
+		
 		$zip->close();
-		$zipFileName = $data['classname'] . 'Template.zip';
+		$zipFileName = $dirName . '.zip';
 		header("Content-disposition: attachment; filename=$zipFileName");
 		header('Content-type: application/zip');
 		readfile($file);

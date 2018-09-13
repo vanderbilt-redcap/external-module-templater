@@ -1,78 +1,81 @@
 {
-    "name": "{{ classname }}",
+	"name": "{{ className }}",
 
-    "namespace": "{{ namespace }}\\{{ classname }}",
+	"namespace": "{{ namespace }}\\{{ className }}",
 
-    "description": "{{ description }}",
+	"description": "{{ description }}",
 
-    "documentation": "README.md",
+	"documentation": "README.md",
 
-    "authors": [
-		{% for author in authors %}
+	"authors": [
+{% for author in authors %}
+		{
+			"name": "{{ author.name }}",
+			"email": "{{ author.email }}",
+			"institution": "{{ author.org }}"
+		}{% if (authors|last)!=author %},
+{% endif %}
+{% endfor %}
 
-        {
-            "name": "{{ author.name }}",
-            "email": "{{ author.email }}",
-            "institution": "{{ author.org }}"
-        }{% if (authors|last)!=author %},
-		{% endif %}
-		{% endfor %}
-		
-    ],
+	],
 
-    "permissions": [
-        {% for name in hooks|keys %}"{{ name }}"{% if (hooks|keys|last)!=name %},
-		{% endif %}
-		{% endfor %}
-		
-    ],
+	"permissions": [
+{% for name in hooks|keys %}
+		"{{ name }}"{% if (hooks|keys|last)!=name %},
+{% endif %}
+{% endfor %}
 
-    "links": {
+	],
+
+	"links": {
 		"project": [
-            {% for link in projectLinks %}
+{% for link in projectLinks %}
 			{
-                "name": "{{ link.name }}",
-                "icon": "{{ link.icon }}",
-                "url": "{{ link.url }}"
-            }{% if (projectLinks|last)!=link %},
-			{% endif %}
-			{% endfor %}
-			
+				"name": "{{ link.name }}",
+				"icon": "{{ link.icon }}",
+				"url": "{{ link.url }}"
+			}{% if (projectLinks|last)!=link %},
+{% endif %}
+{% endfor %}
+
 		],
-        "control-center": [
-            {% for link in controlCenterLinks %}
+		"control-center": [
+{% for link in controlCenterLinks %}
 			{
-                "name": "{{ link.name }}",
-                "icon": "{{ link.icon }}",
-                "url": "{{ link.url }}{% if link.NOAUTH %}?NOAUTH{% endif %}"
-            }{% if (controlCenterLinks|last)!=link %},
-			{% endif %}
-			{% endfor %}
-			
-        ]
-    },
+				"name": "{{ link.name }}",
+				"icon": "{{ link.icon }}",
+				"url": "{{ link.url }}{% if link.NOAUTH %}?NOAUTH{% endif %}"
+			}{% if (controlCenterLinks|last)!=link %},
+{% endif %}
+{% endfor %}
+
+		]
+	},
 
 	"no-auth-pages": [
-		{% for link in projectLinks %}
-		{% if link.NOAUTH %}"{{ link.url|split('.')[0] }}"{% if ((projectLinks|last)!=link) or (controlCenterLinks|length > 0) %},
-		{% endif %}{% endif %}
-		{% endfor %}
-		{% for link in controlCenterLinks %}
-		{% if link.NOAUTH %}"{{ link.url|split('.')[0] }}"{% if (controlCenterLinks|last)!=link %},
-		{% endif %}{% endif %}
-		{% endfor %}
+{% for link in projectLinks %}
+{% if link.NOAUTH %}
+		"{{ link.url|split('.')[0] }}"{% if ((projectLinks|last)!=link) or (controlCenterLinks|length > 0) %},
+{% endif %}{% endif %}
+{% endfor %}
+{% for link in controlCenterLinks %}
+{% if link.NOAUTH %}
+		"{{ link.url|split('.')[0] }}"{% if (controlCenterLinks|last)!=link %},
+{% endif %}{% endif %}
+{% endfor %}
+
 	],
-	
+
 	"project-settings": [
-		
+
 	],
-	
+
 	"system-settings": [
-		
+
 	],
-	
+
 	"crons": [
-		{% for cron in crons %}
+{% for cron in crons %}
 		{
 			"cron_name": "{{ cron.name }}",
 			"cron_description": "{{ cron.desc }}",
@@ -80,10 +83,11 @@
 			"cron_frequency": "{{ cron.freq }}",
 			"cron_max_run_time": "{{ link.max }}"
 		}{% if (crons|last)!=cron %},
-		{% endif %}
-		{% endfor %}
+{% endif %}
+{% endfor %}
+
 	],
-	
+
 	"compatibility": {
 		"php-version-min": "",
 		"php-version-max": "",

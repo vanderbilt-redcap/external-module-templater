@@ -1,9 +1,10 @@
 
 // polite IIFE wrapper
 !function(){
-	// required to have at least one author
 	$(function(){
+		// required to have at least one author
 		ExternalModuleTemplater.addTab('authors')
+		$('#authorsName1').attr('required', true)
 	})
 }()
 
@@ -17,7 +18,7 @@ var ExternalModuleTemplater = {
 				<div class="form-group row">
 					<label for="authorsName_i_" class="col-sm-2 col-form-label">Author Name</label>
 					<div class="col-sm-10">
-						<input type="text" id="authorsName_i_" name="authorsName_i_" class="form-control" placeholder="John A. Smith"></input>
+						<input type="text" id="authorsName_i_" name="authorsName_i_" class="form-control" placeholder="John A. Smith" required></input>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -198,10 +199,10 @@ var ExternalModuleTemplater = {
 	setMockData : function(){
 		// when called on the newModule page, this function sets the form so that it should generate
 		// a template identical to the test package: MyModule.zip
-		$('#moduleName').val('MyModule')
-		$('#moduleNamespace').val('MyNamespace')
+		$('#className').val('MyModule')
+		$('#namespace').val('MyNamespace')
 		$('#moduleDescription').val('This module does A, B, and C.')
-		$('#moduleInitVersion').val('1.0')
+		// $('#moduleInitVersion').val('1.0')
 		
 		$('#authorsName1').val('Clark Kent')
 		$('#authorsEmail1').val('clark.kent@dailyplanet.com')
@@ -239,5 +240,9 @@ var ExternalModuleTemplater = {
 		$('#cronsFrequency2').val('3600')
 		$('#cronsMaxRunTime2').val('60')
 		
+		$('#includeLicense').prop('checked', true)
+		var text = $('#licenseText').val().replace('<YEAR>', "2018")
+		text = text.replace('<COPYRIGHT_HOLDER_NAME>', 'Vanderbilt University Medical Center')
+		$('#licenseText').val(text)
 	}
 }

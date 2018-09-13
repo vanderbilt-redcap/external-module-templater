@@ -23,29 +23,40 @@
 		<div class="mx-3 mb-3 p-2 card">
 			<div class="card-body">
 				<div class="form-group row">
-					<label for="moduleName" class="col-sm-2 col-form-label">Name</label>
+					<label for="className" class="col-sm-2 col-form-label">Class Name</label>
 					<div class="col-sm-10">
-						<input type="text" id="moduleName" name="moduleName" class="form-control" placeholder="MyModule"></input>
+						<input type="text" id="className" name="className" class="form-control" placeholder="MyModule" required></input>
+						<span class="text-muted">This will be the name of the actual PHP class that holds business logic as well as the .php file that contains the class definition</span>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="moduleNamespace" class="col-sm-2 col-form-label">Namespace</label>
+					<label for="moduleInitVersion" class="col-sm-2 col-form-label">Initial Version</label>
 					<div class="col-sm-10">
-						<input type="text" id="moduleNamespace" name="moduleNamespace" class="form-control mb-1" placeholder="ABCResearch/MyModule"></input>
-						<!-- <span class="text-muted">e.g. MyInstitution/MyModule</span> -->
+						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" placeholder="0.1"></textarea>
+						<span class="text-muted">Must be in format X.X.X or X.X where X is any integer from 0 to 100</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="dirName" class="col-sm-2 col-form-label">Directory Name </label>
+					<div class="col-sm-10">
+						<input type="text" id="dirName" name="dirName" class="form-control" placeholder="my_redcap_module_v0.1"></input>
+						<span class="text-muted">Should match pattern [any_unique_snake_case_name]_v[INITIAL_VERSION]</span>
+						<br /><span class="text-muted">You can search the <a href="https://redcap.vanderbilt.edu/consortium/modules/index.php">REDCap Repo</a> to ensure your name will be unique</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="namespace" class="col-sm-2 col-form-label">Namespace</label>
+					<div class="col-sm-10">
+						<input type="text" id="namespace" name="namespace" class="form-control mb-1" placeholder="MyOrgName\MyModule" required></input>
+						<span class="text-muted">Final sub-namespace must be the module's class name (e.g., <b>MyOrgName\NotMyModule</b> is not allowed)</span>
+						<br />
+						<span class="text-muted">Multiple namespaces allowed (e.g., <b>MyOrgName\MyTeam\MyModule</b>)</span>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="moduleDescription" class="col-sm-2 col-form-label">Description</label>
 					<div class="col-sm-10">
-						<textarea id="moduleDescription" name="moduleDescription" class="form-control" rows="3" placeholder="This module does A, B, and C."></textarea>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="moduleInitVersion" class="col-sm-2 col-form-label">Description</label>
-					<div class="col-sm-10">
-						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" placeholder="0.1"></textarea>
-						<span class="text-muted">Must be in format X.X.X or X.X where X is an integer from 0 to 100.</span>
+						<textarea id="moduleDescription" name="moduleDescription" class="form-control" rows="3" placeholder="This module does A, B, and C." required></textarea>
 					</div>
 				</div>
 			</div>
@@ -120,10 +131,42 @@
 			</div>
 			<div id="cronsCardBody" class="card-body"></div>
 		</div>
+		
+		<!-- LICENSE -->
+		<h5 class="text-center">License</h5>
+		<div class="mx-3 mb-3 p-2 card">
+			<div class="card-body">
+				<fieldset class="form-group pb-3">
+					<div class="row">
+						<legend class="col-form-label col-sm-2 pt-0">Include LICENSE?</legend>
+						<div class="col-sm-10 d-flex">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="includeLicense" name="includeLicense">
+							</div>
+							<span class="text-muted">If selected, a file named LICENSE with the text below will be added to the template .zip archive</span>
+						</div>
+					</div>
+				</fieldset>
+				<div class="form-group row">
+					<label for="licenseText" class="col-sm-2 col-form-label">Description</label>
+					<div class="col-sm-10">
+						<textarea id="licenseText" name="licenseText" class="form-control" rows="9">Copyright (c) <YEAR> <COPYRIGHT_HOLDER_NAME>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</textarea>
+						<span class="text-muted">Default shown is the MIT License from <a href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></span>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="row p-5 justify-content-center">
 			<!-- <input type='hidden' name="generate" value="1"></input> -->
 			<button class="btn btn-primary" type="submit" method="post">Generate External Module Template</button>
 		</div>
+		
 	</form>
 </div>
 </html>
