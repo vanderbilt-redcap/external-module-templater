@@ -1,12 +1,74 @@
 
-// polite IIFE wrapper
-!function(){
-	$(function(){
-		// required to have at least one author
-		ExternalModuleTemplater.addTab('authors')
-		$('#authorsName1').attr('required', true)
+
+$(function() {
+	// validate version number if provided
+	$('#moduleInitVersion').on('change', function(e){
+		$(this).removeClass('invalid')
+		$('#versionError').hide()
+		
+		// remove whitespace from provided version string
+		let supplied = $(this).val().replace(/ /g, '')
+		
+		if (supplied === "") {
+			return
+		}
+		
+		// any unallowed chars?
+		if (/[^0-9.]/.test(supplied)) {
+			$(this).addClass('invalid')
+			$('#versionError').show()
+			$('#versionError').text("Version invalid: only digits and periods allowed")
+			return
+		}
+		
+		let parts = supplied.split('.')
+		if (parts.length > 3) {
+			$(this).addClass('invalid')
+			$('#versionError').show()
+			$('#versionError').text("Version invalid: only 2 or 3 subversions integers allowed")
+			return
+		} else if (parts.length < 2) {
+			$(this).addClass('invalid')
+			$('#versionError').show()
+			$('#versionError').text("Version invalid: must have at least 2 subversion integers (e.g., N.M instead of N)")
+			return
+		}
+		
+		for (let i in parts) {
+			let n = parseInt(parts[i])
+			if (n < 0 || n > 100) {
+				$(this).addClass('invalid')
+				$('#versionError').show()
+				$('#versionError').text("Version invalid: subversion integers lower than 0 or higher than 100: " + n)
+				return
+			}
+		}
 	})
-}()
+	
+	// validate integers for cron frequency and maxruntime inputs
+	$('form').on('change', "[name*='cronsFrequency'], [name*='cronsMaxRunTime']", function(e) {
+		$(this).removeClass('invalid')
+		$(this).next().hide()
+		
+		if ($(this).val() == "")
+			return
+		
+		if (parseInt($(this).val()) != $(this).val()) {
+			$(this).addClass('invalid')
+			$(this).next().show()
+			$(this).next().text("Only integers allowed")
+		}
+	})
+	
+	$('form').on('submit', function(e) {
+		let invalidInputs = $('.invalid')
+		if (invalidInputs.length != 0) {
+			invalidInputs.first().focus()
+			e.preventDefault()
+			e.stopPropagation()
+		}
+	})
+})
 
 // global javascript object for this external module
 var ExternalModuleTemplater = {
@@ -79,6 +141,7 @@ var ExternalModuleTemplater = {
 						<div class="col-sm-10">
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" id="linksNOAUTH_i_" name="linksNOAUTH_i_">
+								<span class="text-muted">If checked, this link will not require REDCap user authorization</span>
 							</div>
 						</div>
 					</div>
@@ -108,12 +171,14 @@ var ExternalModuleTemplater = {
 					<label for="cronsFrequency_i_" class="col-sm-2 col-form-label">Frequency (s)</label>
 					<div class="col-sm-10">
 						<input type="text" id="cronsFrequency_i_" name="cronsFrequency_i_" class="form-control" placeholder="3600"></input>
+						<span id="cronsFrequencyError" style="display: none; color: #c00000"></span>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="cronsMaxRunTime_i_" class="col-sm-2 col-form-label">Max Run Time (s)</label>
 					<div class="col-sm-10">
 						<input type="text" id="cronsMaxRunTime_i_" name="cronsMaxRunTime_i_" class="form-control" placeholder="60"></input>
+						<span id="cronsMaxRunTimeError" style="display: none; color: #c00000"></span>
 					</div>
 				</div>
 			</div>`
@@ -198,7 +263,7 @@ var ExternalModuleTemplater = {
 	// for testing/dev:
 	setMockData : function(){
 		// when called on the newModule page, this function sets the form so that it should generate
-		// a template identical to the test package: MyModule.zip
+		// a template identical to example template "my_module_v0.1.zip"
 		$('#className').val('MyModule')
 		$('#namespace').val('MyNamespace')
 		$('#moduleDescription').val('This module does A, B, and C.')
@@ -212,8 +277,10 @@ var ExternalModuleTemplater = {
 		$('#authorsEmail2').val('lois.lane@dailyplanet.com')
 		$('#authorsOrg2').val('The Daily Planet')
 		
+		$('#everyPageHooks').prop('checked', true)
 		this.toggleHook($('button:contains(redcap_add_edit_records_page)'))
 		this.toggleHook($('button:contains(redcap_control_center)'))
+		this.toggleHook($('button:contains(redcap_module_system_enable)'))
 		
 		this.addTab('links')
 		$('#linksName1').val('Templater Info')

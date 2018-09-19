@@ -6,10 +6,12 @@ class {{ className }} extends \ExternalModules\AbstractExternalModule {
 		parent::__construct();
 		// Other code to run when object is instantiated
 	}
-{% for hookName, args in hooks %}
 	
-	public function {{ hookName }}({{ args|join(', ') }}) {
+{% for hook in hooks %}
+	public function {{ hook.name }}{{ hook.args|striptags }}{
 		
-	}
+	}{% if (hooks|last!=set or set|last!=hook) %},
+	
+{% endif %}
 {% endfor %}
 }

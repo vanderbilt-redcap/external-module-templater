@@ -20,12 +20,15 @@
 	],
 
 	"permissions": [
-{% for name in hooks|keys %}
-		"{{ name }}"{% if (hooks|keys|last)!=name %},
+{% for hook in hooks %}
+		"{{ hook.name }}"{% if (hooks|last)!=hook %},
 {% endif %}
 {% endfor %}
 
 	],
+	
+	"enable-every-page-hooks-on-system-pages": {% if everyPageHooks %}true,{% else %}false,{% endif %}
+	
 
 	"links": {
 		"project": [
@@ -81,7 +84,7 @@
 			"cron_description": "{{ cron.desc }}",
 			"method": "{{ cron.method }}",
 			"cron_frequency": "{{ cron.freq }}",
-			"cron_max_run_time": "{{ link.max }}"
+			"cron_max_run_time": "{{ cron.max }}"
 		}{% if (crons|last)!=cron %},
 {% endif %}
 {% endfor %}
