@@ -17,8 +17,12 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			'projectLinks' => []
 		];
 		$data['initialVersion'] = empty($_POST['moduleInitVersion']) ? '0.1' : $_POST['moduleInitVersion'];
-		preg_match_all('/[A-Z][a-z]+/', $data['className'], $matches);
-		$dirName = empty($_POST['dirName']) ? join('_', array_map('strtolower', $matches[0])) . '_v' . $data['initialVersion'] : $_POST['dirName'];
+		
+		// determine directory name via given class name
+		// preg_match_all('/[A-Z][a-z]+/', $data['className'], $matches);
+		// $dirName = ($_POST['dirName']=="") ? join('_', array_map('strtolower', $matches[0])) . '_v' . $data['initialVersion'] : $_POST['dirName'];
+		
+		$dirName = ($_POST['dirName']=="") ? 'module_template_v' . $data['initialVersion'] : $_POST['dirName'];
 		
 		# authors
 		$done = false;
