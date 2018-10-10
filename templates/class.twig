@@ -8,7 +8,7 @@ class {{ className }} extends \ExternalModules\AbstractExternalModule {
 	}
 	
 {% for hook in hooks %}
-	public function {{ hook.name }}{{ hook.args|striptags }}{
+	public function {{ hook.name }}{{ hook.args|striptags }} {
 		
 	}
 
