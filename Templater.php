@@ -187,14 +187,16 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$signatureFixes = array (
 			"void" => "",
 			" = NULL," => ",",
-			"int \$" => "\$",
-			"string \$" => "\$"
+			"int $" => "$",
+			"string $" => "$"
 		);
 
 		foreach ($hooks as $setName => $set) {
 			foreach ($set as $hookName => $hook) {
 				preg_match('/\(.*\)/', $hook['function'], $matches);
-				$hooks[$setName][$hookName]['args'] = str_replace(array_keys($signatureFixes), array_values($signatureFixes), $matches[0]);
+				$args = strip_tags($matches[0]);
+				$args = str_replace(array_keys($signatureFixes), array_values($signatureFixes), $args);
+				$hooks[$setName][$hookName]['args'] = $args;
 			}
 		}
 		
