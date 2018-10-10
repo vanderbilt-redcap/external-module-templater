@@ -10,8 +10,8 @@ class {{ className }} extends \ExternalModules\AbstractExternalModule {
 {% for hook in hooks %}
 	public function {{ hook.name }}{{ hook.args|striptags }}{
 		
-	}{% if (hooks|last!=set or set|last!=hook) %},
+	}
+
 	
-{% endif %}
 {% endfor %}
 }
