@@ -185,10 +185,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		}
 		
 		$signatureFixes = array (
-			"void" => "",
-			" = NULL," => ",",
-			"int $" => "$",
-			"string $" => "$"
+			"void" => ""
 		);
 
 		foreach ($hooks as $setName => $set) {
