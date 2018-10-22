@@ -139,37 +139,37 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 				"2" => [
 					"name" => "redcap_module_system_disable",
 					"description" => "Triggered when a module gets disabled on Control Center.",
-					"function" => "void <b>redcap_module_system_enable</b> ( <b>\$version</b> )"
+					"function" => "void <b>redcap_module_system_disable</b> ( <b>\$version</b> )"
 				],
 				"3" => [
 					"name" => "redcap_module_system_change_version",
 					"description" => "Triggered when a module version is changed.",
-					"function" => "void <b>redcap_module_system_enable</b> ( <b>\$version</b> )"
+					"function" => "void <b>redcap_module_system_change_version</b> ( <b>\$version, \$old_version</b> )"
 				],
 				"4" => [
 					"name" => "redcap_module_project_enable",
 					"description" => "Triggered when a module gets enabled on a specific project.",
-					"function" => "void <b>redcap_module_system_enable</b> ( <b>\$version</b> )"
+					"function" => "void <b>redcap_module_project_enable</b> ( <b>\$version, \$project_id</b> )"
 				],
 				"5" => [
 					"name" => "redcap_module_project_disable",
 					"description" => "Triggered when a module gets disabled on a specific project.",
-					"function" => "void <b>redcap_module_system_enable</b> ( <b>\$version</b> )"
+					"function" => "void <b>redcap_module_project_disable</b> ( <b>\$version, \$project_id</b> )"
 				],
 				"6" => [
 					"name" => "redcap_module_configure_button_display",
 					"description" => "Triggered when each enabled module defined is rendered. Return <code>null</code> if you don't want to display the Configure button and <code>true</code> to display.",
-					"function" => "void <b>redcap_module_system_enable</b> ( <b>\$version</b> )"
+					"function" => "void <b>redcap_module_configure_button_display</b> ( <b>\$project_id</b> )"
 				],
 				"7" => [
 					"name" => "redcap_module_link_check_display",
 					"description" => "Triggered when each link defined in config.json is rendered. Override this method and return <code>null</code> if you don't want to display the link, or modify and return the <code>\$link</code> parameter as desired. This method also controls whether pages will load if users access their URLs directly.",
-					"function" => "void <b>redcap_module_system_enable</b> ( <b>\$version</b> )"
+					"function" => "void <b>redcap_module_link_check_display</b> ( <b>\$project_id, \$link</b> )"
 				],
 				"8" => [
 					"name" => "redcap_module_save_configuration",
 					"description" => "Triggered after a module configuration is saved.",
-					"function" => "void <b>redcap_module_system_enable</b> ( <b>\$version</b> )"
+					"function" => "void <b>redcap_module_save_configuration</b> ( <b>\$project_id</b> )"
 				]
 			]
 		];
@@ -184,10 +184,16 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			$i++;
 		}
 		
+		$signatureFixes = array (
+			"void" => ""
+		);
+
 		foreach ($hooks as $setName => $set) {
 			foreach ($set as $hookName => $hook) {
 				preg_match('/\(.*\)/', $hook['function'], $matches);
-				$hooks[$setName][$hookName]['args'] = $matches[0];
+				$args = strip_tags($matches[0]);
+				$args = str_replace(array_keys($signatureFixes), array_values($signatureFixes), $args);
+				$hooks[$setName][$hookName]['args'] = $args;
 			}
 		}
 		
