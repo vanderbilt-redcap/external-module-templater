@@ -16,6 +16,11 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			'hooks' => [],
 			'projectLinks' => []
 		];
+		
+		if (strpos($data['namespace'], $data['className']) === false) {
+			$data['namespace'] = $data['namespace'] . "\\" . $data['className'];
+		}
+		
 		$data['initialVersion'] = empty($_POST['moduleInitVersion']) ? '0.1' : $_POST['moduleInitVersion'];
 		
 		// determine directory name via given class name
