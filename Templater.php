@@ -10,6 +10,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			'everyPageHooks' => $_POST['everyPageHooks'],
 			'namespace' => $_POST['namespace'],
 			'description' => $_POST['moduleDescription'],
+			'dirName' => $_POST['dirName'],
 			'authors' => [],
 			'controlCenterLinks' => [],
 			'crons' => [],
@@ -24,10 +25,11 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$data['initialVersion'] = empty($_POST['moduleInitVersion']) ? '0.1' : $_POST['moduleInitVersion'];
 		
 		// determine directory name via given class name
-		// preg_match_all('/[A-Z][a-z]+/', $data['className'], $matches);
-		// $dirName = ($_POST['dirName']=="") ? join('_', array_map('strtolower', $matches[0])) . '_v' . $data['initialVersion'] : $_POST['dirName'];
-		
-		$dirName = ($_POST['dirName']=="") ? 'module_template_v' . $data['initialVersion'] : $_POST['dirName'];
+		if (empty($_POST['dirName'])) {
+			preg_match_all('/([A-Z]*[a-z]*)/', $data['className'], $matches);
+			array_pop($matches[0]);
+			$data['dirName'] = join('_', array_map('strtolower', $matches[0])) . '_v' . $data['initialVersion'];
+		}
 		
 		# authors
 		$done = false;
@@ -123,7 +125,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		}
 		
 		$zip->close();
-		$zipFileName = $dirName . '.zip';
+		$zipFileName = $data['dirName'] . '.zip';
 		header("Content-disposition: attachment; filename=$zipFileName");
 		header('Content-type: application/zip');
 		readfile($file);
