@@ -220,7 +220,7 @@ var ExternalModuleTemplater = {
 		$('#' + type + 'Info' + (i+1)).remove()
 		
 		// clear all entered data from removed tab
-		$('#' + type + 'CardBody input').val("")
+		// $('#' + type + 'CardBody input').val("")
 		
 		this.renumberCard(type)
 		this.setActiveTab(type, i+1)
