@@ -3,8 +3,8 @@
 $(function() {
 	// validate version number if provided
 	$('#moduleInitVersion').on('change', function(e){
-		$(this).removeClass('invalid')
-		$('#versionError').hide()
+		$(this).removeClass('invalid');
+		$('#versionError').hide();
 		
 		// remove whitespace from provided version string
 		let supplied = $(this).val().replace(/ /g, '')
@@ -45,8 +45,22 @@ $(function() {
 		}
 	})
 	
+	$('form').on('change', "[name*='cronsRepetition'][value='timed']", function(e) {
+		var id = $(this).prop('id');
+		var n = id.replace(/^[A-Za-z]+/, "");
+		$(".freq"+n).hide();
+		$(".timed"+n).show();
+	});
+
+	$('form').on('change', "[name*='cronsRepetition'][value='freq']", function(e) {
+		var id = $(this).prop('id');
+		var n = id.replace(/^[A-Za-z]+/, "");
+		$(".freq"+n).show();
+		$(".timed"+n).hide();
+	});
+
 	// validate integers for cron frequency and maxruntime inputs
-	$('form').on('change', "[name*='cronsFrequency'], [name*='cronsMaxRunTime']", function(e) {
+	$('form').on('change', "[name*='cronsFrequency'], [name*='cronsMaxRunTime'], [name*='cronsHour'], [name*='cronsMinute'], [name*='cronsWeekday'], [name*='cronsMonthday']", function(e) {
 		$(this).removeClass('invalid')
 		$(this).next().hide()
 		
@@ -168,17 +182,57 @@ var ExternalModuleTemplater = {
 					</div>
 				</div>
 				<div class="form-group row">
+					<label for="cronsRepetition_i_" class="col-sm-2 col-form-label">Type of Repetition</label>
+					<table>
+						<tr>
+							<td style='vertical-align: top; padding-left: 15px; padding-right: 15px;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='freq' checked> by Frequency</input></td>
+							<td style='vertical-align: top;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='timed'> by Time<br>(current server time <b>`+timestamp+`</b><br>in timezone <i>`+timezone+`</i>)</input></td>
+						</tr>
+						<tr>
+							<td colspan='2'><span id="cronsRepetitionError" style="display: none; color: #c00000"></span></td>
+						</tr>
+					</table>
+				</div>
+				<div class="form-group row freq_i_">
 					<label for="cronsFrequency_i_" class="col-sm-2 col-form-label">Frequency (s)</label>
 					<div class="col-sm-10">
 						<input type="text" id="cronsFrequency_i_" name="cronsFrequency_i_" class="form-control" placeholder="3600"></input>
 						<span id="cronsFrequencyError" style="display: none; color: #c00000"></span>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row freq_i_">
 					<label for="cronsMaxRunTime_i_" class="col-sm-2 col-form-label">Max Run Time (s)</label>
 					<div class="col-sm-10">
 						<input type="text" id="cronsMaxRunTime_i_" name="cronsMaxRunTime_i_" class="form-control" placeholder="60"></input>
 						<span id="cronsMaxRunTimeError" style="display: none; color: #c00000"></span>
+					</div>
+				</div>
+				<div class="form-group row timed_i_" style='display: none;'>
+					<label for="cronsMonthday_i_" class="col-sm-2 col-form-label">Day-of-the-Month (a number 1-31; blank if every day)</label>
+					<div class="col-sm-10">
+						<input type="text" id="cronsMonthday_i_" name="cronsMonthday_i_" class="form-control" placeholder=""></input>
+						<span id="cronsMonthdayError" style="display: none; color: #c00000"></span>
+					</div>
+				</div>
+				<div class="form-group row timed_i_" style='display: none;'>
+					<label for="cronsWeekday_i_" class="col-sm-2 col-form-label">Weekday (0 = Sunday, ..., 6 = Saturday; blank if every day)</label>
+					<div class="col-sm-10">
+						<input type="text" id="cronsWeekday_i_" name="cronsWeekday_i_" class="form-control" placeholder=""></input>
+						<span id="cronsWeekdayError" style="display: none; color: #c00000"></span>
+					</div>
+				</div>
+				<div class="form-group row timed_i_" style='display: none;'>
+					<label for="cronsHour_i_" class="col-sm-2 col-form-label">Hour (a number 0-23; in timezone `+timezone+` with current time <b>`+timestamp+`</b>)</label>
+					<div class="col-sm-10">
+						<input type="text" id="cronsHour_i_" name="cronsHour_i_" class="form-control" placeholder="2"></input>
+						<span id="cronsHourError" style="display: none; color: #c00000"></span>
+					</div>
+				</div>
+				<div class="form-group row timed_i_" style='display: none;'>
+					<label for="cronsMinute_i_" class="col-sm-2 col-form-label">Minute</label>
+					<div class="col-sm-10">
+						<input type="text" id="cronsMinute_i_" name="cronsMinute_i_" class="form-control" placeholder="30" required></input>
+						<span id="cronsMinuteError" style="display: none; color: #c00000"></span>
 					</div>
 				</div>
 			</div>`
@@ -186,7 +240,7 @@ var ExternalModuleTemplater = {
 	addTab : function(type){
 		$('#' + type + 'Card').show()
 		let i = $('#' + type + 'TabHeads').children().length+1
-		
+
 		// create, then add tab head
 		let head = this.elements.tabHead
 		head = head.replace('><', '>' + i + '<')

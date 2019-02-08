@@ -4,6 +4,15 @@ namespace RedcapConHack\Templater;
 
 require_once(__DIR__."/vendor/autoload.php");
 
+?>
+
+<script>
+var timezone = "<?php echo date_default_timezone_get(); ?>";
+var timestamp = "<?php echo date("Y-m-d H:i:s"); ?>";
+</script>
+
+<?php
+
 $loader = new \Twig_Loader_Filesystem(__DIR__."/templates/");
 $twig = new \Twig_Environment($loader);
 
