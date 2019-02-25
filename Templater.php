@@ -112,7 +112,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$classFile = $twig->render('class.twig', $data);
 		$configFile = $twig->render('config.twig', $data);
 		$readmeFile = $twig->render('README.twig', $data);
-		
+
 		# create zip file, open it, add files, close zip, and send
 		$zip = new \ZipArchive();
 		$file = tempnam(EDOC_PATH,"");
@@ -132,6 +132,10 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$zipFileName = $data['dirName'] . '.zip';
 		header("Content-disposition: attachment; filename=$zipFileName");
 		header('Content-type: application/zip');
+		header('Content-transfer-encoding: binary');
+		header("Content-length: " . filesize($file));
+		header("Pragma: no-cache"); 
+		header("Expires: 0"); 
 		readfile($file);
 		unlink($file);
 	}

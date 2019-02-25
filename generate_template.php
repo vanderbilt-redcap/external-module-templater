@@ -4,6 +4,13 @@ namespace RedcapConHack\Templater;
 
 require_once(__DIR__."/vendor/autoload.php");
 
+$loader = new \Twig_Loader_Filesystem(__DIR__."/templates/");
+$twig = new \Twig_Environment($loader);
+
+if ($_POST) {
+	$module->generateTemplateFromPost($twig);
+}
+else {
 ?>
 
 <script>
@@ -12,14 +19,6 @@ var timestamp = "<?php echo date("Y-m-d H:i:s"); ?>";
 </script>
 
 <?php
-
-$loader = new \Twig_Loader_Filesystem(__DIR__."/templates/");
-$twig = new \Twig_Environment($loader);
-
-if ($_POST) {
-	$module->generateTemplateFromPost($twig);
-}
-else {
     echo $twig->render("newModule.twig", [
 			"js_link" => $module->getUrl('js/functions.js'),
 			"hooks" => $module::getHookInfo()

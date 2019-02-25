@@ -185,8 +185,8 @@ var ExternalModuleTemplater = {
 					<label for="cronsRepetition_i_" class="col-sm-2 col-form-label">Type of Repetition</label>
 					<table>
 						<tr>
-							<td style='vertical-align: top; padding-left: 15px; padding-right: 15px;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='freq' checked> by Frequency</input></td>
-							<td style='vertical-align: top;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='timed'> by Time<br>(current server time <b>`+timestamp+`</b><br>in timezone <i>`+timezone+`</i>)</input></td>
+							<td style='vertical-align: top; padding-left: 15px; padding-right: 15px; text-align: left;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='freq' checked> by Frequency</input></td>
+							<td style='vertical-align: top; text-align: left;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='timed'> by Time<br>(current server time <b>`+timestamp+`</b><br>in timezone <i>`+timezone+`</i>)</input></td>
 						</tr>
 						<tr>
 							<td colspan='2'><span id="cronsRepetitionError" style="display: none; color: #c00000"></span></td>
@@ -231,7 +231,7 @@ var ExternalModuleTemplater = {
 				<div class="form-group row timed_i_" style='display: none;'>
 					<label for="cronsMinute_i_" class="col-sm-2 col-form-label">Minute</label>
 					<div class="col-sm-10">
-						<input type="text" id="cronsMinute_i_" name="cronsMinute_i_" class="form-control" placeholder="30" required></input>
+						<input type="text" id="cronsMinute_i_" name="cronsMinute_i_" class="form-control" placeholder="30"></input>
 						<span id="cronsMinuteError" style="display: none; color: #c00000"></span>
 					</div>
 				</div>
