@@ -1,11 +1,108 @@
-<html>
-<head>
+{
+	"name": "{{ className }}",
 
-</head>
-<body>
-Test Config<br />
-{% for key,hook in all_hooks %}
-    <input type="checkbox" name="enable_hook_{{ hook.hook_name }}">{{ hook.hook_name }}<br />
+	"namespace": "{{ namespace|replace({"\\": "\\\\"}) }}",
+
+	"description": "{{ description }}",
+
+	"documentation": "README.md",
+
+	"authors": [
+{% for author in authors %}
+		{
+			"name": "{{ author.name }}",
+			"email": "{{ author.email }}",
+			"institution": "{{ author.org }}"
+		}{% if (authors|last)!=author %},
+{% endif %}
 {% endfor %}
-</body>
-</html>
+
+	],
+
+	"permissions": [
+{% for hook in hooks %}
+		"{{ hook.name }}"{% if (hooks|last)!=hook %},
+{% endif %}
+{% endfor %}
+
+	],
+	
+	"enable-every-page-hooks-on-system-pages": {% if everyPageHooks %}true,{% else %}false,{% endif %}
+	
+
+	"links": {
+		"project": [
+{% for link in projectLinks %}
+			{
+				"name": "{{ link.name }}",
+				"icon": "{{ link.icon }}",
+				"url": "{{ link.url }}"
+			}{% if (projectLinks|last)!=link %},
+{% endif %}
+{% endfor %}
+
+		],
+		"control-center": [
+{% for link in controlCenterLinks %}
+			{
+				"name": "{{ link.name }}",
+				"icon": "{{ link.icon }}",
+				"url": "{{ link.url }}{% if link.NOAUTH %}?NOAUTH{% endif %}"
+			}{% if (controlCenterLinks|last)!=link %},
+{% endif %}
+{% endfor %}
+
+		]
+	},
+
+	"no-auth-pages": [
+{% for link in projectLinks %}
+{% if link.NOAUTH %}
+		"{{ link.url|split('.')[0] }}"{% if ((projectLinks|last)!=link) or (controlCenterLinks|length > 0) %},
+{% endif %}{% endif %}
+{% endfor %}
+{% for link in controlCenterLinks %}
+{% if link.NOAUTH %}
+		"{{ link.url|split('.')[0] }}"{% if (controlCenterLinks|last)!=link %},
+{% endif %}{% endif %}
+{% endfor %}
+
+	],
+
+	"project-settings": [
+
+	],
+
+	"system-settings": [
+
+	],
+
+	"crons": [
+{% for cron in crons %}
+		{
+			"cron_name": "{{ cron.name }}",
+			"cron_description": "{{ cron.desc }}",
+			"method": "{{ cron.method }}",
+{% if cron.freq %}			"cron_frequency": "{{ cron.freq }}",
+			"cron_max_run_time": "{{ cron.max }}"
+{% else %}{% if cron.hour != '' %}			"cron_hour": "{{ cron.hour }}",
+{% endif %}
+{% if cron.weekday != '' %}			"cron_weekday": "{{ cron.weekday }}",
+{% endif %}
+{% if cron.monthday != '' %}			"cron_monthday": "{{ cron.monthday }}",
+{% endif %}
+{% if cron.minute != '' %}			"cron_minute": "{{ cron.minute }}"
+{% endif %}{% endif %}
+		}{% if (crons|last)!=cron %},{% endif %}
+
+{% endfor %}
+
+	],
+
+	"compatibility": {
+		"php-version-min": "",
+		"php-version-max": "",
+		"redcap-version-min": "",
+		"redcap-version-max": ""
+	}
+}

@@ -1,0 +1,221 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}jquery-ui.min.css" />
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}style.css" />
+    <style>
+		.form-control::-webkit-input-placeholder { color: #ddd; }  /* WebKit, Blink, Edge */
+		.form-control:-moz-placeholder { color: #ddd; }  /* Mozilla Firefox 4 to 18 */
+		.form-control::-moz-placeholder { color: #ddd; }  /* Mozilla Firefox 19+ */
+		.form-control:-ms-input-placeholder { color: #ddd; }  /* Internet Explorer 10-11 */
+		.form-control::-ms-input-placeholder { color: #ddd; }  /* Microsoft Edge */
+		input.invalid {border-color: #c00000}
+	</style>
+    <script type="text/javascript" src="{{ constant('APP_PATH_JS') }}base.js"></script>
+    <script type="text/javascript" src="{{ js_link }}"></script>
+	<title>Configure New REDCap External Module</title>
+</head>
+<body>
+<div class="container border">
+	<!-- top header -->
+    <div class="row m-5">
+        <div class="col text-center">
+			<h3>Configure New REDCap External Module</h3>
+		</div>
+    </div>
+	
+	<form method="POST">
+	
+		<!-- module level settings/inputs -->
+		<h5 class="text-center">Module</h5>
+		<div class="mx-3 mb-3 p-2 card">
+			<div class="card-body">
+				<div class="form-group row">
+					<label for="className" class="col-sm-2 col-form-label">Class Name <span style='color:#C00000'>*</span></label>
+					<div class="col-sm-10">
+						<input type="text" id="className" name="className" class="form-control" placeholder="MyModule" required></input>
+						<span class="text-muted">This will be the name of the actual PHP class that holds business logic as well as the .php file that contains the class definition</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="namespace" class="col-sm-2 col-form-label">Namespace <span style='color:#C00000'>*</span></label>
+					<div class="col-sm-10">
+						<input type="text" id="namespace" name="namespace" class="form-control mb-1" placeholder="MyOrgName\MyModule" required></input>
+						<span class="text-muted">Final sub-namespace must be the module's class name (e.g., <b>MyOrgName\NotMyModule</b> is not allowed)</span>
+						<br />
+						<span class="text-muted">Multiple namespaces allowed (e.g., <b>MyOrgName\MyTeam\MyModule</b>)</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="moduleDescription" class="col-sm-2 col-form-label">Description <span style='color:#C00000'>*</span></label>
+					<div class="col-sm-10">
+						<textarea id="moduleDescription" name="moduleDescription" class="form-control" rows="3" placeholder="This module does A, B, and C." required></textarea>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="moduleInitVersion" class="col-sm-2 col-form-label">Initial Version</label>
+					<div class="col-sm-10 d-flex flex-column">
+						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" placeholder="0.1"></input>
+						<span id="versionError" style="display: none; color: #c00000"></span>
+						<span class="text-muted">Must be in format X.X.X or X.X where X is any integer from 0 to 100</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="dirName" class="col-sm-2 col-form-label">Directory Name </label>
+					<div class="col-sm-10">
+						<input type="text" id="dirName" name="dirName" class="form-control" placeholder="my_redcap_module_v0.1"></input>
+						<span class="text-muted">Should match pattern [any_unique_snake_case_name]_v[INITIAL_VERSION]</span>
+						<br /><span class="text-muted">You can search the <a href="https://redcap.vanderbilt.edu/consortium/modules/index.php">REDCap Repo</a> to ensure your name will be unique</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- authors section -->
+		<h5 class="text-center">Authors</h5>
+		<div class="row pb-4 align-items-center">
+			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="ExternalModuleTemplater.addTab('authors')">Add Author</button>
+			<button class = "btn btn-primary" id="removeAuthorButton" type="button" onclick="ExternalModuleTemplater.removeTab('authors')" disabled>Remove Author</button>
+		</div>
+		<div id="authorsCard" class="mx-3 mb-3 p-2 card">
+			<div class="card-header">
+				<ul id="authorsTabHeads" class="nav nav-tabs card-header-tabs">
+					<li class="nav-item">
+						<a class="nav-link active" onclick="ExternalModuleTemplater.setActiveTab('authors', $(this).parent().index()+1)">1</a>
+					</li>
+				</ul>
+			</div>
+			<div id="authorsCardBody" class="card-body">
+				<div class="authorsInfo" id="authorsInfo1" name="authorsInfo1">
+					<div class="form-group row">
+						<label for="authorsName1" class="col-sm-2 col-form-label">Author Name <span style='color:#C00000'>*</span></label>
+						<div class="col-sm-10">
+							<input type="text" id="authorsName1" name="authorsName1" class="form-control" placeholder="John A. Smith" required></input>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="authorsEmail1" class="col-sm-2 col-form-label">Email Address</label>
+						<div class="col-sm-10">
+							<input type="text" id="authorsEmail1" name="authorsEmail1" class="form-control mb-1" placeholder="john.smith@abc.org"></input>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="authorsOrg1" class="col-sm-2 col-form-label">Organization</label>
+						<div class="col-sm-10">
+							<input type="text" id="authorsOrg1" name="authorsOrg1" class="form-control" placeholder="ABC Research"></input>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- hooks section -->
+		<h5 class="text-center">Hooks</h5>
+		<div class="mx-3 mb-3 p-2 card">
+			<div class="card-body">
+				<fieldset class="form-group pb-3">
+					<div class="row">
+						<legend class="col-form-label col-sm-2 pt-0">Every page hooks?</legend>
+						<div class="col-sm-10 d-flex">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="everyPageHooks" name="everyPageHooks">
+							</div>
+							<span class="text-muted">By default, hooks only activate on certain project specific pages. Enable this option to allow system pages to trigger hook calls</span>
+						</div>
+					</div>
+				</fieldset>
+				{% for set in hooks %}
+				<table class="table mb-5 table-responsive-xl">
+					<thead>
+						<tr class="d-flex">
+							<th class="col">{% if set==hooks.redcap %}REDCap Hooks{% else %}External Module Hooks{% endif %}</th>
+							<th class="col">Description</th>
+							<th class="col">Function</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for hook in set %}
+						<tr class="d-flex">
+							<td class="col" scope="row">
+								<button name="{{ hook.name }}" type="submit" class="btn" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="ExternalModuleTemplater.toggleHook(this)">
+									{{ hook.name }}
+								</button>
+								<span class="text-muted"></span>
+							</td>
+							<td class="col"><p>{{ hook.description|raw }}</p></td>
+							<td class="col"><p>{{ hook.function|raw }}</p></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<br />
+				{% endfor %}
+			</div>
+		</div>
+		
+		<!-- links	-->
+		<h5 class="text-center">Links</h5>
+		<div class="row pb-4 align-items-center">
+			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="ExternalModuleTemplater.addTab('links')">Add Link</button>
+			<button class = "btn btn-primary" id="removeLinkButton" type="button" onclick="ExternalModuleTemplater.removeTab('links')" disabled>Remove Link</button>
+		</div>
+		<div id="linksCard" style="display:none" class="mx-3 mb-3 p-2 card">
+			<div class="card-header">
+				<ul id="linksTabHeads" class="nav nav-tabs card-header-tabs">
+				</ul>
+			</div>
+			<div id="linksCardBody" class="card-body"></div>
+		</div>
+		
+		<!-- crons -->
+		<h5 class="text-center">Crons</h5>
+		<div class="row pb-4 align-items-center">
+			<button class = "btn btn-primary ml-5 mr-4" type="button" onclick="ExternalModuleTemplater.addTab('crons')">Add Cron</button>
+			<button class = "btn btn-primary" id="removeCronButton" type="button" onclick="ExternalModuleTemplater.removeTab('crons')" disabled>Remove Cron</button>
+		</div>
+		<div id="cronsCard" style="display:none" class="mx-3 mb-3 p-2 card">
+			<div class="card-header">
+				<ul id="cronsTabHeads" class="nav nav-tabs card-header-tabs">
+				</ul>
+			</div>
+			<div id="cronsCardBody" class="card-body"></div>
+		</div>
+		
+		<!-- LICENSE -->
+		<h5 class="text-center">License</h5>
+		<div class="mx-3 mb-3 p-2 card">
+			<div class="card-body">
+				<fieldset class="form-group pb-3">
+					<div class="row">
+						<legend class="col-form-label col-sm-2 pt-0">Include LICENSE?</legend>
+						<div class="col-sm-10 d-flex">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="includeLicense" name="includeLicense">
+							</div>
+							<span class="text-muted">If selected, a file named LICENSE with the text below will be added to the template .zip archive</span>
+						</div>
+					</div>
+				</fieldset>
+				<div class="form-group row">
+					<label for="licenseText" class="col-sm-2 col-form-label">Description</label>
+					<div class="col-sm-10">
+						<textarea id="licenseText" name="licenseText" class="form-control" rows="9">Copyright (c) <YEAR> <COPYRIGHT_HOLDER_NAME>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</textarea>
+						<span class="text-muted">Default shown is the MIT License from <a href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row p-5 justify-content-center">
+			<!-- <input type='hidden' name="generate" value="1"></input> -->
+			<button class="btn btn-primary" type="submit" method="post">Generate External Module Template</button>
+		</div>
+		
+	</form>
+</div>
+</html>
