@@ -25,3 +25,6 @@ var timestamp = "<?php echo date("Y-m-d H:i:s"); ?>";
 		]
 	);
 }
+
+// Prevent js errors about missing variables
+renderJsVars();
