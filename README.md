@@ -1,13 +1,14 @@
-# external_module_templater
+# External Module Templater
 
-Builds out external module template files for quick module generation
+Builds out a starting point for new external modules
 
-Instructions:
+### Instructions:
 1. Download the repository and extract so the "external_module_templater_vx.x" folder is in the redcap/modules folder of your web server.
-2. In Control Center > External Modules, enable "External Module Templater - vx.x"
-3. Refresh the Control Center and click "Generate External Module Template" link at under "External Modules" header of the sidebar.
-4. Fill out the form and click "Generate External Module Template" button at the bottom of the page.
-5. Your browser should now download a .zip containing at minimum:
+1. In Control Center > External Modules, enable "External Module Templater - vx.x"
+1. Refresh the Control Center and click "Generate External Module Template" link at under "External Modules" header of the sidebar.
+1. Fill out the form and click "Generate External Module Template" button at the bottom of the page.
+1. Your browser should now download a .zip containing at minimum:
 	* a PHP class/module file
-	* a README.md file
-	* a config.json file
+	* a `README.md` file
+	* a `config.json` file
+	
