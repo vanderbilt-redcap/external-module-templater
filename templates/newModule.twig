@@ -1,7 +1,9 @@
 <html>
 <head>
-    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}jquery-ui.min.css" />
-    <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ css_link }}" />
+    {% if css_link2 %}
+        <link rel="stylesheet" href="{{ css_link2 }}" />
+	{% endif %}
     <link rel="stylesheet" href="{{ constant('APP_PATH_CSS') }}style.css" />
     <style>
 		.form-control::-webkit-input-placeholder { color: #ddd; }  /* WebKit, Blink, Edge */
@@ -11,8 +13,8 @@
 		.form-control::-ms-input-placeholder { color: #ddd; }  /* Microsoft Edge */
 		input.invalid {border-color: #c00000}
 	</style>
-    <script type="text/javascript" src="{{ constant('APP_PATH_JS') }}base.js"></script>
-    <script type="text/javascript" src="{{ js_link }}"></script>
+	<script type="text/javascript" src="{{ js_link }}"></script>
+    <script type="text/javascript" src="{{ js_link2 }}"></script>
 	<title>Configure New REDCap External Module</title>
 </head>
 <body>
