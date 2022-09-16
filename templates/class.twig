@@ -14,4 +14,10 @@ class {{ className }} extends \ExternalModules\AbstractExternalModule {
 
 	
 {% endfor %}
+
+{%  for cron in crons %}
+	public function {{ cron.method }}( $cronParameters ) {
+
+	}
+{% endfor %}
 }

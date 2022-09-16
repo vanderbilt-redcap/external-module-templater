@@ -85,7 +85,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$done = false;
 		$i = 1;
 		while (!$done) {
-			if (isset($_POST["cronsName$i"])) {
+			if (isset($_POST["cronsName$i"]) && ($_POST["cronsName$i"] != "")) {
 				$data['crons'][$i] = [
 					'name' => $_POST["cronsName$i"],
 					'desc' => $_POST["cronsDescription$i"],
@@ -119,6 +119,13 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$zip->addFromString('README.md', $readmeFile);
 		
 		# add method files for links and crons? (e.g., generate_template.php)
+		foreach($data["projectLinks"] as $thisLink) {
+			$zip->addFromString($thisLink["url"], "<?php\n/** @var \$module \\".$data["namespace"]."\\".$data["className"]." */\n");
+		}
+		
+		foreach($data["controlCenterLinks"] as $thisLink) {
+			$zip->addFromString($thisLink["url"], "<?php\n/** @var \$module \\".$data["namespace"]."\\".$data["className"]." */\n");
+		}
 		
 		# add LICENSE?
 		if (isset($_POST['includeLicense']) and isset($_POST['licenseText'])){
@@ -171,7 +178,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 				"6" => [
 					"name" => "redcap_module_configure_button_display",
 					"description" => "Triggered when each enabled module defined is rendered. Return <code>null</code> if you don't want to display the Configure button and <code>true</code> to display.",
-					"function" => "void <b>redcap_module_configure_button_display</b> ( <b>\$project_id</b> )"
+					"function" => "void <b>redcap_module_configure_button_display</b> ( )"
 				],
 				"7" => [
 					"name" => "redcap_module_link_check_display",

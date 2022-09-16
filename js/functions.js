@@ -166,6 +166,7 @@ var ExternalModuleTemplater = {
 					<label for="cronsName_i_" class="col-sm-2 col-form-label">Cron Name</label>
 					<div class="col-sm-10">
 						<input type="text" id="cronsName_i_" name="cronsName_i_" class="form-control" placeholder="myCron"></input>
+						<span class="text-muted">Should be unique among all modules. No spaces allowed.</span>
 					</div>
 				</div>
 				<div class="form-group row">
