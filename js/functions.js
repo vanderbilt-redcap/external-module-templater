@@ -181,18 +181,6 @@ var ExternalModuleTemplater = {
 					<span class="text-muted">Refers to a PHP method in the module class that will be executed when the cron is run.</span>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label for="cronsRepetition_i_" class="col-sm-2 col-form-label">Type of Repetition</label>
-					<table>
-						<tr>
-							<td style='vertical-align: top; padding-left: 15px; padding-right: 15px; text-align: left;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='freq' checked> by Frequency</input></td>
-							<td style='vertical-align: top; text-align: left;'><input type="radio" id="cronsRepetition_i_" name="cronsRepetition_i_" class="form-control" value='timed'> by Time<br>(current server time <b>`+timestamp+`</b><br>in timezone <i>`+timezone+`</i>)</input></td>
-						</tr>
-						<tr>
-							<td colspan='2'><span id="cronsRepetitionError" style="display: none; color: #c00000"></span></td>
-						</tr>
-					</table>
-				</div>
 				<div class="form-group row freq_i_">
 					<label for="cronsFrequency_i_" class="col-sm-2 col-form-label">Frequency (s)</label>
 					<div class="col-sm-10">
@@ -205,34 +193,6 @@ var ExternalModuleTemplater = {
 					<div class="col-sm-10">
 						<input type="text" id="cronsMaxRunTime_i_" name="cronsMaxRunTime_i_" class="form-control" placeholder="60"></input>
 						<span id="cronsMaxRunTimeError" style="display: none; color: #c00000"></span>
-					</div>
-				</div>
-				<div class="form-group row timed_i_" style='display: none;'>
-					<label for="cronsMonthday_i_" class="col-sm-2 col-form-label">Day-of-the-Month (a number 1-31; blank if every day)</label>
-					<div class="col-sm-10">
-						<input type="text" id="cronsMonthday_i_" name="cronsMonthday_i_" class="form-control" placeholder=""></input>
-						<span id="cronsMonthdayError" style="display: none; color: #c00000"></span>
-					</div>
-				</div>
-				<div class="form-group row timed_i_" style='display: none;'>
-					<label for="cronsWeekday_i_" class="col-sm-2 col-form-label">Weekday (0 = Sunday, ..., 6 = Saturday; blank if every day)</label>
-					<div class="col-sm-10">
-						<input type="text" id="cronsWeekday_i_" name="cronsWeekday_i_" class="form-control" placeholder=""></input>
-						<span id="cronsWeekdayError" style="display: none; color: #c00000"></span>
-					</div>
-				</div>
-				<div class="form-group row timed_i_" style='display: none;'>
-					<label for="cronsHour_i_" class="col-sm-2 col-form-label">Hour (a number 0-23; in timezone `+timezone+` with current time <b>`+timestamp+`</b>)</label>
-					<div class="col-sm-10">
-						<input type="text" id="cronsHour_i_" name="cronsHour_i_" class="form-control" placeholder="2"></input>
-						<span id="cronsHourError" style="display: none; color: #c00000"></span>
-					</div>
-				</div>
-				<div class="form-group row timed_i_" style='display: none;'>
-					<label for="cronsMinute_i_" class="col-sm-2 col-form-label">Minute</label>
-					<div class="col-sm-10">
-						<input type="text" id="cronsMinute_i_" name="cronsMinute_i_" class="form-control" placeholder="30"></input>
-						<span id="cronsMinuteError" style="display: none; color: #c00000"></span>
 					</div>
 				</div>
 			</div>`

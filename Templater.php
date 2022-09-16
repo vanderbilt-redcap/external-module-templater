@@ -11,6 +11,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			'namespace' => $_POST['namespace'],
 			'description' => $_POST['moduleDescription'],
 			'dirName' => $_POST['dirName'],
+			'frameworkVersion' => $_POST['frameworkVersion'] ?: 8,
 			'authors' => [],
 			'controlCenterLinks' => [],
 			'crons' => [],
@@ -90,11 +91,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 					'desc' => $_POST["cronsDescription$i"],
 					'method' => $_POST["cronsMethod$i"],
 					'freq' => $_POST["cronsFrequency$i"],
-					'max' => $_POST["cronsMaxRunTime$i"],
-					'hour' => $_POST["cronsHour$i"],
-					'weekday' => $_POST["cronsWeekday$i"],
-					'monthday' => $_POST["cronsMonthday$i"],
-					'minute' => $_POST["cronsMinute$i"]
+					'max' => $_POST["cronsMaxRunTime$i"]
 				];
 			} else {
 				$done = true;
