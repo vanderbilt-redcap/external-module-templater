@@ -120,11 +120,11 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		
 		# add method files for links and crons? (e.g., generate_template.php)
 		foreach($data["projectLinks"] as $thisLink) {
-			$zip->addFromString($thisLink["url"], "<?php\n/** @var \$module \\".$data["namespace"]."\\".$data["className"]." */\n");
+			$zip->addFromString($thisLink["url"], "<?php\nnamespace ".$data["namespace"].";\n/** @var \$module ".$data["className"]." */\n");
 		}
 		
 		foreach($data["controlCenterLinks"] as $thisLink) {
-			$zip->addFromString($thisLink["url"], "<?php\n/** @var \$module \\".$data["namespace"]."\\".$data["className"]." */\n");
+			$zip->addFromString($thisLink["url"], "<?php\nnamespace ".$data["namespace"].";\n/** @var \$module ".$data["className"]." */\n");
 		}
 		
 		# add LICENSE?
