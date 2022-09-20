@@ -214,10 +214,10 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 				$args = str_replace(array_keys($signatureFixes), array_values($signatureFixes), $args);
 
 				## int varName = NULL is invalid syntax, so remove
-				$args = preg_replace('/(int \$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
-				$args = preg_replace('/(int \$[a-zA-Z0-9\_]+) \= 1/',"\\1",$args);
-				$args = preg_replace('/(string \$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
-				$args = preg_replace('/(array \$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
+				$args = preg_replace('/int (\$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
+				$args = preg_replace('/int (\$[a-zA-Z0-9\_]+) \= 1/',"\\1",$args);
+				$args = preg_replace('/string (\$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
+				$args = preg_replace('/array (\$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
 
 				$hooks[$setName][$hookName]['args'] = $args;
 			}
