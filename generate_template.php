@@ -34,3 +34,6 @@ var timestamp = "<?php echo date("Y-m-d H:i:s"); ?>";
 	}
     echo $twig->render("newModule.twig",$templateConstants);
 }
+
+// Prevent js errors about missing variables
+renderJsVars();

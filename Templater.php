@@ -2,6 +2,11 @@
 namespace RedcapConHack\Templater;
 
 class Templater extends \ExternalModules\AbstractExternalModule {
+
+    /**
+     * Build $data array from $_POST array so Twig can render our files
+     * @param $twig
+     */
 	function generateTemplateFromPost($twig) {
 		# build $data array from $_POST array so Twig can render our files
 		$hookInfo = self::getHookInfo();
@@ -19,13 +24,14 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			'projectLinks' => []
 		];
 		
+		# Add the classname to the namespace if not already defined
 		if (strpos($data['namespace'], $data['className']) === false) {
 			$data['namespace'] = $data['namespace'] . "\\" . $data['className'];
 		}
 		
 		$data['initialVersion'] = empty($_POST['moduleInitVersion']) ? '0.1' : $_POST['moduleInitVersion'];
 		
-		// determine directory name via given class name
+		# determine directory name via given class name
 		if (empty($_POST['dirName'])) {
 			preg_match_all('/([A-Z]*[a-z]*)/', $data['className'], $matches);
 			array_pop($matches[0]);
@@ -144,9 +150,13 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		unlink($file);
 	}
 	
+    /**
+     * Build an array of redcap and external module hook methods*
+     * @return array
+     */
 	public static function getHookInfo(){
-		# Get array of Hook methods and their attributes
-		$temp = \PluginDocs::getPluginMethods(\PluginDocs::HOOKS_CLASS);
+
+	    // Start with manually building the extmod methods
 		$hooks = [
 			"redcap" => [],
 			"exmod" => [
@@ -193,6 +203,8 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			]
 		];
 		
+		// Next, get the default redcap hook methods
+		$temp = \PluginDocs::getPluginMethods(\PluginDocs::HOOKS_CLASS);
 		$i = 1;
 		foreach ($temp as $name => $info) {
 			$hooks['redcap']["$i"] = [
@@ -203,6 +215,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			$i++;
 		}
 		
+		// Fix some of the method signatures
 		$signatureFixes = array (
 			"void" => ""
 		);

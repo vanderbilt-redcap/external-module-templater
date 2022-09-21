@@ -38,7 +38,7 @@
 			{
 				"name": "{{ link.name }}",
 				"icon": "{{ link.icon }}",
-				"url": "{{ link.url }}"
+				"url": "{{ link.url }}{% if link.NOAUTH %}?NOAUTH{% endif %}"
 			}{% if (projectLinks|last)!=link %},
 {% endif %}
 {% endfor %}
