@@ -16,6 +16,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			'namespace' => $_POST['namespace'],
 			'description' => $_POST['moduleDescription'],
 			'dirName' => $_POST['dirName'],
+			'frameworkVersion' => $_POST['frameworkVersion'] ?: 8,
 			'authors' => [],
 			'controlCenterLinks' => [],
 			'crons' => [],
@@ -90,17 +91,13 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$done = false;
 		$i = 1;
 		while (!$done) {
-			if (isset($_POST["cronsName$i"])) {
+			if (isset($_POST["cronsName$i"]) && ($_POST["cronsName$i"] != "")) {
 				$data['crons'][$i] = [
 					'name' => $_POST["cronsName$i"],
 					'desc' => $_POST["cronsDescription$i"],
 					'method' => $_POST["cronsMethod$i"],
 					'freq' => $_POST["cronsFrequency$i"],
-					'max' => $_POST["cronsMaxRunTime$i"],
-					'hour' => $_POST["cronsHour$i"],
-					'weekday' => $_POST["cronsWeekday$i"],
-					'monthday' => $_POST["cronsMonthday$i"],
-					'minute' => $_POST["cronsMinute$i"]
+					'max' => $_POST["cronsMaxRunTime$i"]
 				];
 			} else {
 				$done = true;
@@ -128,6 +125,13 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 		$zip->addFromString('README.md', $readmeFile);
 		
 		# add method files for links and crons? (e.g., generate_template.php)
+		foreach($data["projectLinks"] as $thisLink) {
+			$zip->addFromString($thisLink["url"], "<?php\nnamespace ".$data["namespace"].";\n/** @var \$module ".$data["className"]." */\n");
+		}
+		
+		foreach($data["controlCenterLinks"] as $thisLink) {
+			$zip->addFromString($thisLink["url"], "<?php\nnamespace ".$data["namespace"].";\n/** @var \$module ".$data["className"]." */\n");
+		}
 		
 		# add LICENSE?
 		if (isset($_POST['includeLicense']) and isset($_POST['licenseText'])){
@@ -184,7 +188,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 				"6" => [
 					"name" => "redcap_module_configure_button_display",
 					"description" => "Triggered when each enabled module defined is rendered. Return <code>null</code> if you don't want to display the Configure button and <code>true</code> to display.",
-					"function" => "void <b>redcap_module_configure_button_display</b> ( <b>\$project_id</b> )"
+					"function" => "void <b>redcap_module_configure_button_display</b> ( )"
 				],
 				"7" => [
 					"name" => "redcap_module_link_check_display",
@@ -223,7 +227,10 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 				$args = str_replace(array_keys($signatureFixes), array_values($signatureFixes), $args);
 
 				## int varName = NULL is invalid syntax, so remove
-				$args = preg_replace('/(int \$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
+				$args = preg_replace('/int (\$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
+				$args = preg_replace('/int (\$[a-zA-Z0-9\_]+) \= 1/',"\\1",$args);
+				$args = preg_replace('/string (\$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
+				$args = preg_replace('/array (\$[a-zA-Z0-9\_]+) \= NULL/',"\\1",$args);
 
 				$hooks[$setName][$hookName]['args'] = $args;
 			}

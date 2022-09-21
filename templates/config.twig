@@ -7,6 +7,8 @@
 
 	"documentation": "README.md",
 
+	"framework-version": {{ frameworkVersion }},
+
 	"authors": [
 {% for author in authors %}
 		{
@@ -83,16 +85,8 @@
 			"cron_name": "{{ cron.name }}",
 			"cron_description": "{{ cron.desc }}",
 			"method": "{{ cron.method }}",
-{% if cron.freq %}			"cron_frequency": "{{ cron.freq }}",
+			"cron_frequency": "{{ cron.freq }}",
 			"cron_max_run_time": "{{ cron.max }}"
-{% else %}{% if cron.hour != '' %}			"cron_hour": "{{ cron.hour }}",
-{% endif %}
-{% if cron.weekday != '' %}			"cron_weekday": "{{ cron.weekday }}",
-{% endif %}
-{% if cron.monthday != '' %}			"cron_monthday": "{{ cron.monthday }}",
-{% endif %}
-{% if cron.minute != '' %}			"cron_minute": "{{ cron.minute }}"
-{% endif %}{% endif %}
 		}{% if (crons|last)!=cron %},{% endif %}
 
 {% endfor %}
