@@ -12,6 +12,7 @@
 		.form-control:-ms-input-placeholder { color: #ddd; }  /* Internet Explorer 10-11 */
 		.form-control::-ms-input-placeholder { color: #ddd; }  /* Microsoft Edge */
 		input.invalid {border-color: #c00000}
+		.hook-btn { background-color: #eee; }
 	</style>
 	<script type="text/javascript" src="{{ js_link }}"></script>
     <script type="text/javascript" src="{{ js_link2 }}"></script>
@@ -33,10 +34,24 @@
 		<div class="mx-3 mb-3 p-2 card">
 			<div class="card-body">
 				<div class="form-group row">
+					<label for="moduleName" class="col-sm-2 col-form-label">Module Name <span style='color:#C00000'>*</span></label>
+					<div class="col-sm-10">
+						<input type="text" id="moduleName" name="moduleName" class="form-control" placeholder="Friendly Module Name" required></input>
+						<span class="text-muted">This is the human readable module name (can include spaces)</span>
+					</div>
+				</div>
+				<div class="form-group row">
 					<label for="className" class="col-sm-2 col-form-label">Class Name <span style='color:#C00000'>*</span></label>
 					<div class="col-sm-10">
 						<input type="text" id="className" name="className" class="form-control" placeholder="MyModule" required></input>
-						<span class="text-muted">This will be the name of the actual PHP class that holds business logic as well as the .php file that contains the class definition</span>
+						<span class="text-muted">This will be the name of the actual PHP class that holds business logic as well as the .php file that contains the class definition.</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="orgName" class="col-sm-2 col-form-label">Organization Name <span style='color:#C00000'>*</span></label>
+					<div class="col-sm-10">
+						<input type="text" id="orgName" name="orgName" class="form-control" placeholder="SomeInstitution"></input>
+						<span class="text-muted">This is the namespace prefix, typically the name of your institution.</span>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -57,7 +72,7 @@
 				<div class="form-group row">
 					<label for="moduleInitVersion" class="col-sm-2 col-form-label">Initial Version</label>
 					<div class="col-sm-10 d-flex flex-column">
-						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" placeholder="0.1"></input>
+						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" placeholder="{{ default_module_version }}" required></input>
 						<span id="versionError" style="display: none; color: #c00000"></span>
 						<span class="text-muted">Must be in format X.X.X or X.X where X is any integer from 0 to 100</span>
 					</div>
@@ -65,7 +80,7 @@
 				<div class="form-group row">
 					<label for="dirName" class="col-sm-2 col-form-label">Directory Name </label>
 					<div class="col-sm-10">
-						<input type="text" id="dirName" name="dirName" class="form-control" placeholder="my_redcap_module_v0.1"></input>
+						<input type="text" id="dirName" name="dirName" class="form-control" placeholder="my_redcap_module_v0.1.0"></input>
 						<span class="text-muted">Should match pattern [any_unique_snake_case_name]_v[INITIAL_VERSION]</span>
 						<br /><span class="text-muted">You can search the <a href="https://redcap.vanderbilt.edu/consortium/modules/index.php">REDCap Repo</a> to ensure your name will be unique</span>
 					</div>
@@ -73,8 +88,8 @@
 				<div class="form-group row">
 					<label for="dirName" class="col-sm-2 col-form-label">Framework Version </label>
 					<div class="col-sm-10">
-						<input type="text" id="dirName" name="dirName" class="form-control" placeholder="8"></input>
-						<br /><span class="text-muted">You can search the <a href="https://redcap.vanderbilt.edu/external_modules/Plugins/index.php?page=ext_mods_docs/framework/intro.md">External Module Documentation</a> for versions available on your target REDCap version</span>
+						<input type="text" id="dirName" name="dirName" class="form-control" placeholder="{{ default_framework_version }}"></input>
+						<br /><span class="text-muted">You can search the <a href="{{ framework_doc_url }}">External Module Documentation</a> for versions available on your target REDCap version</span>
 					</div>
 				</div>
 			</div>
@@ -146,7 +161,7 @@
 						{% for hook in set %}
 						<tr class="d-flex">
 							<td class="col" scope="row">
-								<button name="{{ hook.name }}" type="submit" class="btn" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="ExternalModuleTemplater.toggleHook(this)">
+								<button name="{{ hook.name }}" type="submit" class="btn hook-btn" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="return ExternalModuleTemplater.toggleHook(this);">
 									{{ hook.name }}
 								</button>
 								<span class="text-muted"></span>
