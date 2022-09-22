@@ -24,7 +24,10 @@ var timestamp = "<?php echo date("Y-m-d H:i:s"); ?>";
 			"js_link2" => $module->getUrl('js/functions.js'),
 			"css_link" => APP_PATH_CSS."jquery-ui-min.css",
 			"css_link2" => APP_PATH_CSS."bootstrap.min.css",
-			"hooks" => $module::getHookInfo()
+			"hooks" => $module::getHookInfo(),
+            "default_module_version" => $module::DEFAULT_MODULE_VERSION,
+            "default_framework_version" => $module::DEFAULT_FRAMEWORK_VERSION,
+            "framework_doc_url" => APP_PATH_WEBROOT . "Plugins/index.php?page=ext_mods_docs/framework/intro.md"
 	];
 	## Checking if on newer version of REDCap that uses webpack for jquery and bootstrap
 	if(!is_file(APP_PATH_DOCROOT."Resources/css/jquery-ui.min.css")) {
