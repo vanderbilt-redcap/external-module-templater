@@ -2,16 +2,21 @@
 namespace RedcapConHack\Templater;
 
 class Templater extends \ExternalModules\AbstractExternalModule {
+
+    const DEFAULT_FRAMEWORK_VERSION = 10;
+    const DEFAULT_MODULE_VERSION = "0.1.0";
+
 	function generateTemplateFromPost($twig) {
 		# build $data array from $_POST array so Twig can render our files
 		$hookInfo = self::getHookInfo();
 		$data = [
+            'moduleName' => $_POST['moduleName'],
 			'className' => $_POST['className'],
 			'everyPageHooks' => $_POST['everyPageHooks'],
 			'namespace' => $_POST['namespace'],
 			'description' => $_POST['moduleDescription'],
 			'dirName' => $_POST['dirName'],
-			'frameworkVersion' => $_POST['frameworkVersion'] ?: 8,
+			'frameworkVersion' => $_POST['frameworkVersion'] ?: $this::DEFAULT_FRAMEWORK_VERSION,
 			'authors' => [],
 			'controlCenterLinks' => [],
 			'crons' => [],
@@ -23,7 +28,7 @@ class Templater extends \ExternalModules\AbstractExternalModule {
 			$data['namespace'] = $data['namespace'] . "\\" . $data['className'];
 		}
 		
-		$data['initialVersion'] = empty($_POST['moduleInitVersion']) ? '0.1' : $_POST['moduleInitVersion'];
+		$data['initialVersion'] = empty($_POST['moduleInitVersion']) ? self::DEFAULT_MODULE_VERSION : $_POST['moduleInitVersion'];
 		
 		// determine directory name via given class name
 		if (empty($_POST['dirName'])) {
