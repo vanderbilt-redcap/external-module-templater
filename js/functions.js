@@ -1,49 +1,127 @@
-
+function clean(str) {
+	return str.replace(/[^a-z_ ]/ig, '').replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+		if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+		return match.toUpperCase();
+	});
+}
 
 $(function() {
-	// validate version number if provided
-	$('#moduleInitVersion').on('change', function(e){
-		$(this).removeClass('invalid');
-		$('#versionError').hide();
-		
-		// remove whitespace from provided version string
-		let supplied = $(this).val().replace(/ /g, '')
-		
-		if (supplied === "") {
-			return
-		}
-		
-		// any unallowed chars?
-		if (/[^0-9.]/.test(supplied)) {
-			$(this).addClass('invalid')
-			$('#versionError').show()
-			$('#versionError').text("Version invalid: only digits and periods allowed")
-			return
-		}
-		
-		let parts = supplied.split('.')
-		if (parts.length > 3) {
-			$(this).addClass('invalid')
-			$('#versionError').show()
-			$('#versionError').text("Version invalid: only 2 or 3 subversions integers allowed")
-			return
-		} else if (parts.length < 2) {
-			$(this).addClass('invalid')
-			$('#versionError').show()
-			$('#versionError').text("Version invalid: must have at least 2 subversion integers (e.g., N.M instead of N)")
-			return
-		}
-		
-		for (let i in parts) {
-			let n = parseInt(parts[i])
-			if (n < 0 || n > 100) {
-				$(this).addClass('invalid')
-				$('#versionError').show()
-				$('#versionError').text("Version invalid: subversion integers lower than 0 or higher than 100: " + n)
-				return
+	// Set className based on moduleName
+	$('#moduleName').on(
+		{
+			blur: function() {
+				let cn = $('#className');
+				if ( cn.val() === "" ) {
+					let clean_cn = this.value
+						.replace(/[^a-z_ ]/ig, '')
+						.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+							if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+							return match.toUpperCase();
+						});
+					cn.val(clean_cn);
+				}
 			}
 		}
-	})
+	);
+
+	// prevent spaces on classname and remove spaces if they somehow got in there
+	$('#className').on(
+		{
+			keydown: function(e) {
+				if (e.which === 32)
+					return false;
+			},
+			change: function() {
+				this.value = this.value.replace(/\s/g, "");
+			},
+		}
+	);
+
+	// Create namespace from org and class
+	$('#orgName').on(
+		{
+			keydown: function(e) {
+				if (e.which === 32)
+					return false;
+			},
+			blur: function() {
+				let n = $('#namespace');
+				let c = $('#className');
+
+				if ( n.val() === "" ) {
+					n.val(clean(this.value) + "\\" + c.val() )
+				}
+
+				// Set the default org name for the first author
+				let ao1 = $('#authorsOrg1');
+				if (ao1.val() === '') {
+					ao1.val(this.value);
+				}
+			},
+
+		}
+	);
+
+	// create default folder name from name and version
+	$('#moduleInitVersion').on(
+		{
+			blur: function() {
+				let m = $('#moduleName');
+				let d = $('#dirName');
+
+				// lowercase module name and clean any non ascii chars
+				let prefix = m.val().toLowerCase().replace(/[\s-]/g,"_").replace(/[^a-z_]/,'');
+
+				if ( d.val() === "" ) {
+					d.val(prefix + "_v" + this.value )
+				}
+			},
+			// validate version number if provided
+			change: function(e) {
+				$(this).removeClass('invalid');
+				let ve = $('#versionError');
+				ve.hide();
+
+				// remove whitespace from provided version string
+				let supplied = $(this).val().replace(/ /g, '')
+
+				if (supplied === "") {
+					return
+				}
+
+				// any unallowed chars?
+				if (/[^0-9.]/.test(supplied)) {
+					$(this).addClass('invalid')
+					ve.show()
+					ve.text("Version invalid: only digits and periods allowed")
+					return
+				}
+
+				let parts = supplied.split('.')
+				if (parts.length > 3) {
+					$(this).addClass('invalid')
+					ve.show()
+					ve.text("Version invalid: only 2 or 3 subversions integers allowed")
+					return
+				} else if (parts.length < 2) {
+					$(this).addClass('invalid')
+					ve.show()
+					ve.text("Version invalid: must have at least 2 subversion integers (e.g., N.M instead of N)")
+					return
+				}
+
+				for (let i in parts) {
+					let n = parseInt(parts[i])
+					if (n < 0 || n > 100) {
+						$(this).addClass('invalid')
+						ve.show()
+						ve.text("Version invalid: subversion integers lower than 0 or higher than 100: " + n)
+						return
+					}
+				}
+			}
+		}
+	);
 	
 	$('form').on('change', "[name*='cronsRepetition'][value='timed']", function(e) {
 		var id = $(this).prop('id');
@@ -75,6 +153,7 @@ $(function() {
 	})
 	
 	$('form').on('submit', function(e) {
+		console.log("Form Submit",e);
 		let invalidInputs = $('.invalid')
 		if (invalidInputs.length != 0) {
 			invalidInputs.first().focus()
@@ -120,14 +199,14 @@ var ExternalModuleTemplater = {
 				<div class="form-group row">
 					<label for="linksUrl_i_" class="col-sm-2 col-form-label">URL</label>
 					<div class="col-sm-10">
-						<input type="text" id="linksUrl_i_" name="linksUrl_i_" class="form-control mb-1" placeholder="mymodule/config.php"></input>
+						<input type="text" id="linksUrl_i_" name="linksUrl_i_" class="form-control mb-1" placeholder="pages/config.php"></input>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="linksIcon_i_" class="col-sm-2 col-form-label">Icon</label>
 					<div class="col-sm-10">
-						<input type="text" id="linksIcon_i_" name="linksIcon_i_" class="form-control mb-1" placeholder="report"></input>
-						<span class="text-muted">The name of an icon in REDCap's image repository</span>
+						<input type="text" id="linksIcon_i_" name="linksIcon_i_" class="form-control mb-1" placeholder="fas fa-cog"></input>
+						<span class="text-muted">Class name for <a href="https://fontawesome.com/icons" target="_BLANK">Font Awesome Icons</a>, e.g. <code>fas fa-cog</code></span>
 					</div>
 				</div>
 				<fieldset class="form-group">
@@ -276,6 +355,9 @@ var ExternalModuleTemplater = {
 			btn.addClass('btn-primary')
 			btn.closest('tr').animate({backgroundColor: '#e0efff'}, 500)
 		}
+
+		// prevent submit
+		return false;
 	},
 	
 	// for testing/dev:
