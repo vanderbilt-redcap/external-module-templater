@@ -26,9 +26,9 @@
 			<h3>Configure New REDCap External Module</h3>
 		</div>
     </div>
-	
+
 	<form method="POST">
-	
+
 		<!-- module level settings/inputs -->
 		<h5 class="text-center">Module</h5>
 		<div class="mx-3 mb-3 p-2 card">
@@ -86,15 +86,15 @@
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="dirName" class="col-sm-2 col-form-label">Framework Version </label>
+					<label for="frameworkVersion" class="col-sm-2 col-form-label">Framework Version </label>
 					<div class="col-sm-10">
-						<input type="text" id="dirName" name="dirName" class="form-control" placeholder="{{ default_framework_version }}"></input>
+						<input type="text" id="frameworkVersion" name="frameworkVersion" class="form-control" placeholder="{{ default_framework_version }}"></input>
 						<br /><span class="text-muted">You can search the <a href="{{ framework_doc_url }}">External Module Documentation</a> for versions available on your target REDCap version</span>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- authors section -->
 		<h5 class="text-center">Authors</h5>
 		<div class="row pb-4 align-items-center">
@@ -132,7 +132,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- hooks section -->
 		<h5 class="text-center">Hooks</h5>
 		<div class="mx-3 mb-3 p-2 card">
@@ -176,7 +176,7 @@
 				{% endfor %}
 			</div>
 		</div>
-		
+
 		<!-- links	-->
 		<h5 class="text-center">Links</h5>
 		<div class="row pb-4 align-items-center">
@@ -190,7 +190,7 @@
 			</div>
 			<div id="linksCardBody" class="card-body"></div>
 		</div>
-		
+
 		<!-- crons -->
 		<h5 class="text-center">Crons</h5>
 		<div class="row pb-4 align-items-center">
@@ -204,7 +204,7 @@
 			</div>
 			<div id="cronsCardBody" class="card-body"></div>
 		</div>
-		
+
 		<!-- LICENSE -->
 		<h5 class="text-center">License</h5>
 		<div class="mx-3 mb-3 p-2 card">
@@ -239,7 +239,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			<!-- <input type='hidden' name="generate" value="1"></input> -->
 			<button class="btn btn-primary" type="submit" method="post">Generate External Module Template</button>
 		</div>
-		
+
 	</form>
 </div>
 </html>
