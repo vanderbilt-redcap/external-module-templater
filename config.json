@@ -7,6 +7,8 @@
 
 	"documentation": "README.md",
 
+    "framework_version": "11",
+
 	"authors": [
 		{
 			"name": "Kyle McGuffin",
@@ -19,7 +21,7 @@
 			"institution": "Vanderbilt University Medical Center"
 		},
 		{
-			"name": "Andrew Martin",
+			"name": "Andy Martin",
 			"email": "andy123@stanford.edu",
 			"institution": "Stanford University"
 		}
@@ -33,7 +35,7 @@
 		"control-center": [
 			{
 				"name": "Generate External Module Template",
-				"icon": "report",
+				"icon": "fa-solid fa-clone",
 				"url": "generate_template.php"
 			}
 		]

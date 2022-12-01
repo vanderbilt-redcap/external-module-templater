@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# This script assumes you have installed the offical github cli tool `gh`
+# For instructions, please see: https://cli.github.com/manual/installation
+
+echo "This script will initialize this folder as a new git repository, check in all of the"
+echo "files, create a new repository as github.com/{{ gitRepo }}/{{ gitOrg }}, and do the"
+echo "initial push of files"
+echo
+read -p "Are you sure you would like to continue (y/n)? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    echo
+    set -x
+    git init .
+    git add .
+    git commit -m 'initial template'
+    gh repo create {{ gitOrg }}/{{ gitRepo }} --public --source=. --push
+    echo
+    echo "Opening the repo so you can set/review permissions: https://github.com/{{ gitOrg }}/{{ gitRepo }}"
+    python3 -m webbrowser https://github.com/{{ gitOrg }}/{{ gitRepo }}
+fi
+
