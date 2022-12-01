@@ -7,6 +7,8 @@
 
 	"documentation": "README.md",
 
+    "framework_version": "11",
+
 	"authors": [
 		{
 			"name": "Kyle McGuffin",
@@ -17,8 +19,13 @@
 			"name": "Carl Reed",
 			"email": "datacore@vumc.org",
 			"institution": "Vanderbilt University Medical Center"
-		}
-	],
+		},
+        {
+            "name": "Andy Martin",
+            "email": "andy123@stanford.edu",
+            "institution": "Stanford Medicine"
+        }
+    ],
 
 	"permissions": [
 		""
@@ -28,7 +35,7 @@
 		"control-center": [
 			{
 				"name": "Generate External Module Template",
-				"icon": "report",
+				"icon": "fa-solid fa-clone",
 				"url": "generate_template.php"
 			}
 		]

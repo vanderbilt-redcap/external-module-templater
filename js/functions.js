@@ -20,6 +20,12 @@ $(function () {
                         });
                     cn.val(clean_cn);
                 }
+                let gitRepo = $('#gitRepo');
+                gitRepo.val(this.value
+                    .replace(/[^a-z_ ]/ig, '')
+                    .replace(/\s+/g, '_')
+                    .toLowerCase()
+                )
             }
         }
     );
@@ -118,6 +124,19 @@ $(function () {
                         ve.text("Version invalid: subversion integers lower than 0 or higher than 100: " + n)
                         return
                     }
+                }
+            }
+        }
+    );
+
+    // Create namespace from org and class
+    $('#includeGitInit').on(
+        {
+            click: function () {
+                if ($(this).is(':checked')) {
+                    $('#gitOptions').show();
+                } else {
+                    $('#gitOptions').hide();
                 }
             }
         }
@@ -366,6 +385,34 @@ var ExternalModuleTemplater = {
 
         // prevent submit
         return false;
+    },
+
+    // for decoding contents of a variable
+    decodeEntities: function(str) {
+        // this prevents any overhead from creating the object each time
+        var element = document.createElement('div');
+
+        if(str && typeof str === 'string') {
+            // strip script/html tags
+            str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+            str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+            element.innerHTML = str;
+            str = element.textContent;
+            element.textContent = '';
+        }
+
+        return str;
+    },
+
+    // Apply cached info from the last time this user ran the module
+    applyUserCache: function() {
+        console.log(this.user_cache);
+        Object.entries(this.user_cache).forEach(([key, value]) => {
+            let q = 'input[name="' + key + '"]';
+            if ($(q)) {
+                $(q).val(value);
+            }
+        });
     },
 
     // for testing/dev:

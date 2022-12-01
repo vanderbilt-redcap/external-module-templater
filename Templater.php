@@ -6,7 +6,7 @@ class Templater extends \ExternalModules\AbstractExternalModule
 {
 
     const DEFAULT_FRAMEWORK_VERSION = 10;
-    const DEFAULT_MODULE_VERSION = "0.1.0";
+    const DEFAULT_MODULE_VERSION = "0.0.0";
 
     function generateTemplateFromPost($twig)
     {
@@ -19,12 +19,19 @@ class Templater extends \ExternalModules\AbstractExternalModule
             'namespace' => $_POST['namespace'],
             'description' => $_POST['moduleDescription'],
             'dirName' => $_POST['dirName'],
+            'OrgName' => $_POST['orgName'],
             'frameworkVersion' => $_POST['frameworkVersion'] ?: $this::DEFAULT_FRAMEWORK_VERSION,
             'authors' => [],
             'controlCenterLinks' => [],
             'crons' => [],
             'hooks' => [],
-            'projectLinks' => []
+            'projectLinks' => [],
+            'includeGitInit' => isset($_POST['includeGitInit']) && $_POST['includeGitInit'] == 'on',
+            'gitOrg' => $_POST['gitOrg'],
+            'gitRepo' => $_POST['gitRepo'],
+            'includeGitIgnore' => isset($_POST['includeGitIgnore']) && $_POST['includeGitIgnore'] == 'on',
+            'includeEditorConfig' => isset($_POST['includeEditorConfig']) && $_POST['includeEditorConfig'] == 'on',
+            'Year' => date('Y')
         ];
 
         if (strpos($data['namespace'], $data['className']) === false) {
@@ -137,7 +144,28 @@ class Templater extends \ExternalModules\AbstractExternalModule
 
         # add LICENSE?
         if (isset($_POST['includeLicense']) and isset($_POST['licenseText'])) {
-            $zip->addFromString('LICENSE', $_POST['licenseText']);
+            $licenseText = htmlspecialchars($_POST['licenseText'], ENT_QUOTES);
+            $twigTemplate = twig_template_from_string($twig, $licenseText);
+            $license = $twigTemplate->render($data);
+            $zip->addFromString('LICENSE', $license);
+        }
+
+        # git init
+        if ($data['includeGitInit']) {
+            $gitInitFile = $twig->render('gitInit.twig', $data);
+            $zip->addFromString('gitInit.sh', $gitInitFile);
+        }
+
+        # add .gitignore
+        if ($data['includeGitIgnore']) {
+            $gitIgnoreFile = $twig->render('gitIgnore.twig', $data);
+            $zip->addFromString('.gitignore', $gitIgnoreFile);
+        }
+
+        # add editorconfig
+        if ($data['includeEditorConfig']) {
+            $editorConfigFile = $twig->render('editorConfig.twig', $data);
+            $zip->addFromString('.editorConfig', $editorConfigFile);
         }
 
         $zip->close();

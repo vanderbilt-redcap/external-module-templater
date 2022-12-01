@@ -17,6 +17,7 @@
 	<script type="text/javascript" src="{{ js_link }}"></script>
     <script type="text/javascript" src="{{ js_link2 }}"></script>
 	<title>Configure New REDCap External Module</title>
+    <link rel="shortcut icon" href="{{ icon_url }}">
 </head>
 <body>
 <div class="container border">
@@ -72,7 +73,7 @@
 				<div class="form-group row">
 					<label for="moduleInitVersion" class="col-sm-2 col-form-label">Initial Version</label>
 					<div class="col-sm-10 d-flex flex-column">
-						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" placeholder="{{ default_module_version }}" required></input>
+						<input type="text" id="moduleInitVersion" name="moduleInitVersion" class="form-control" value="{{ default_module_version }}" required></input>
 						<span id="versionError" style="display: none; color: #c00000"></span>
 						<span class="text-muted">Must be in format X.X.X or X.X where X is any integer from 0 to 100</span>
 					</div>
@@ -88,7 +89,7 @@
 				<div class="form-group row">
 					<label for="frameworkVersion" class="col-sm-2 col-form-label">Framework Version </label>
 					<div class="col-sm-10">
-						<input type="text" id="frameworkVersion" name="frameworkVersion" class="form-control" placeholder="{{ default_framework_version }}"></input>
+						<input type="text" id="frameworkVersion" name="frameworkVersion" class="form-control" value="{{ default_framework_version }}"></input>
 						<br /><span class="text-muted">You can search the <a href="{{ framework_doc_url }}">External Module Documentation</a> for versions available on your target REDCap version</span>
 					</div>
 				</div>
@@ -205,7 +206,7 @@
 			<div id="cronsCardBody" class="card-body"></div>
 		</div>
 
-		<!-- LICENSE -->
+		<!-- License -->
 		<h5 class="text-center">License</h5>
 		<div class="mx-3 mb-3 p-2 card">
 			<div class="card-body">
@@ -223,7 +224,7 @@
 				<div class="form-group row">
 					<label for="licenseText" class="col-sm-2 col-form-label">Description</label>
 					<div class="col-sm-10">
-						<textarea id="licenseText" name="licenseText" class="form-control" rows="9">Copyright (c) <YEAR> <COPYRIGHT_HOLDER_NAME>
+						<textarea id="licenseText" name="licenseText" class="form-control" rows="9">Copyright (c) <{{ Year }}> {{ OrgName }}
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -235,6 +236,84 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				</div>
 			</div>
 		</div>
+
+        <!-- README -->
+        <h5 class="text-center">Git and Editor Options</h5>
+        <div class="mx-3 mb-3 p-2 card">
+            <div class="card-body">
+                <fieldset>
+                    <div class="form-group row">
+                        <legend class="col-form-label col-sm-2 pt-0">Include .editorconfig?</legend>
+                        <div class="col-sm-10 d-flex">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="includeEditorConfig" name="includeEditorConfig" checked>
+                            </div>
+                            <span class="text-muted">If checked, a default .editorconfig file will be included to enforce formatting options</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <legend class="col-form-label col-sm-2 pt-0">Include .gitignore?</legend>
+                        <div class="col-sm-10 d-flex">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="includeGitIgnore" name="includeGitIgnore" checked>
+                            </div>
+                            <span class="text-muted">If checked, a standard .gitignore file will be included</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <legend class="col-form-label col-sm-2 pt-0">Include git-init script?</legend>
+                        <div class="col-sm-10 d-flex">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="includeGitInit" name="includeGitInit" checked>
+                            </div>
+                            <span class="text-muted">If checked, a script to initialize your git repo will be included</span>
+                        </div>
+                    </div>
+                    <div id="gitOptions">
+                        <div class="form-group row">
+                                <label for="gitOrg" class="col-sm-2 col-form-label">Github Org/User <span style='color:#C00000'>*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="gitOrg" name="gitOrg" class="form-control" placeholder="susom" required></input>
+                                    <span class="text-muted">This corresponds to git@github.com:<b>susom</b>/my-module.git</span>
+                                </div>
+                        </div>
+                        <div class="form-group row">
+                                <label for="gitRepo" class="col-sm-2 col-form-label">Github Repo Name <span style='color:#C00000'>*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="gitRepo" name="gitRepo" class="form-control" placeholder="my_module" required></input>
+                                    <span class="text-muted">This corresponds to git@github.com:susom/<b>my_module</b>.git</span>
+                                </div>
+                        </div>
+                        <div class="row">
+                            <label for="gitRepo" class="col-sm-2 col-form-label">Instructions</label>
+                            <div class="col-sm-10">
+                                <span class="text-muted">To create a new git repository and initialize it with the template
+                                    files, unzip this file into your modules folder and open a terminal.</span>
+                                <pre class="pre-scrollable">% cd my_module_v0.0.0
+% cat gitInit.sh
+% chmod +x gitInit.sh
+% ./gitInit.sh
+</pre>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="mx-3 mb-3 p-2 card">
+
+            <div class="card-body">
+                <pre class="pre-scrollable">
+# copy zip to your modules folder, unzip, open terminal and cd into folder
+
+git init .
+git remote add origin git@github.com:{{ git_org_or_name }}/{{ repo_name }}.git
+git push --set-upstream origin main
+</pre>
+            </div>
+        </div>
+
 		<div class="row p-5 justify-content-center">
 			<!-- <input type='hidden' name="generate" value="1"></input> -->
 			<button class="btn btn-primary" type="submit" method="post">Generate External Module Template</button>
@@ -242,4 +321,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 	</form>
 </div>
+<script>
+    const emt = ExternalModuleTemplater || {};
+    emt.user_cache=JSON.parse(emt.decodeEntities("{{ user_cache }}"));
+    emt.applyUserCache();
+</script>
 </html>
